@@ -469,9 +469,50 @@
     const CLOUDINARY_CLOUD  = 'dpfoul2dc';
     const CLOUDINARY_PRESET = 'Unsigned';
     const WHATSAPP_NUM      = '59171979648';
+    const APPS_SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec';
 
     // ── FECHA MÍNIMA HOY ─────────────────────────────────────────────────────
     document.getElementById('fecha').min = new Date().toISOString().split('T')[0];
+
+    // ── SINCRONIZAR ESTADOS DESDE GOOGLE SHEETS ──────────────────────────────
+    // Consulta el doGet del Apps Script y actualiza badge + botón de cada tarjeta
+    async function sincronizarEstados() {
+      try {
+        const resp = await fetch(APPS_SCRIPT_URL);
+        const data = await resp.json();
+        if (data.status !== 'OK') return;
+
+        data.terrenos.forEach(t => {
+          const card = document.querySelector(`.prop-card[data-id="${t.id}"]`);
+          if (!card) return;
+
+          const badge  = card.querySelector('.estado-badge');
+          const btnSel = card.querySelector('.btn-select');
+          const reservado = t.estado !== 'Disponible';
+
+          // Actualizar badge
+          badge.textContent = reservado ? t.estado : 'Disponible';
+          badge.className   = 'estado-badge ' + (reservado ? 'estado-reservado' : 'estado-disponible');
+
+          // Bloquear tarjeta si no está disponible
+          if (reservado) {
+            card.style.opacity  = '0.6';
+            card.style.cursor   = 'default';
+            btnSel.disabled     = true;
+            btnSel.textContent  = '✖ No disponible';
+            btnSel.style.background = '#888';
+            btnSel.style.cursor = 'not-allowed';
+            // Evitar que se seleccione
+            btnSel.onclick = null;
+          }
+        });
+      } catch (err) {
+        console.warn('No se pudo sincronizar estados:', err);
+        // Falla silenciosa — las tarjetas siguen mostrando "Disponible" por defecto
+      }
+    }
+
+    sincronizarEstados();
 
     // ── INTERSECTION OBSERVER (animación tarjetas) ───────────────────────────
     const observer = new IntersectionObserver(entries => {
