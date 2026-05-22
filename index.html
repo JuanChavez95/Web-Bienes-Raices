@@ -1292,22 +1292,33 @@
     }
 
     // ============================================================
-    // ENVIAR FORMULARIO AL APPS SCRIPT VÍA REDIRECT GET
-    // (Solución 100% libre de CORS: se construye la URL con todos
-    //  los parámetros y se redirige. Apps Script responde con HTML
-    //  de confirmación. El doGet del script debe manejar este flujo.)
-    //
-    // ALTERNATIVA SIN CORS: usar fetch con no-cors + URLSearchParams
-    // y mostrar confirmación local sin esperar respuesta JSON.
+    // ENVIAR AL APPS SCRIPT VÍA IFRAME OCULTO
+    // Sin CORS, sin ventana muerta. El iframe dispara el GET
+    // silenciosamente y el Apps Script registra todo en Sheets.
     // ============================================================
-    async function enviarAlAppsScript(params) {
-      // Construir query string
-      const qs = new URLSearchParams(params).toString();
-      const urlFinal = `${APPS_SCRIPT_URL}?${qs}`;
+    function enviarAlAppsScript(params) {
+      return new Promise((resolve) => {
+        const qs  = new URLSearchParams(params).toString();
+        const url = `${APPS_SCRIPT_URL}?${qs}`;
 
-      // Usamos fetch con no-cors para enviar sin bloquear por CORS.
-      // No podemos leer la respuesta, pero el Apps Script SÍ recibe los datos.
-      await fetch(urlFinal, { method: 'GET', mode: 'no-cors' });
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = url;
+
+        // Esperamos 4 segundos para que el Apps Script procese
+        iframe.onload = () => setTimeout(() => {
+          document.body.removeChild(iframe);
+          resolve();
+        }, 1000);
+
+        // Fallback: si no carga en 6s, resolver igual
+        setTimeout(() => {
+          if (document.body.contains(iframe)) document.body.removeChild(iframe);
+          resolve();
+        }, 6000);
+
+        document.body.appendChild(iframe);
+      });
     }
 
     // ============================================================
