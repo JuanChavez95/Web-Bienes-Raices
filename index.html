@@ -4,16 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BienesCasas Bolivia | Reserva tu Inmueble</title>
-
-  <!-- Google Fonts: Cormorant Garamond (display) + DM Sans (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <style>
-    /* =============================================
-       CSS VARIABLES & RESET
-    ============================================= */
     :root {
       --verde:       #1a3a2a;
       --verde-medio: #2d6a4f;
@@ -27,782 +22,134 @@
       --radius:      18px;
       --trans:       all 0.45s cubic-bezier(.4,0,.2,1);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--crema); color: var(--gris-texto); min-height: 100vh; overflow-x: hidden; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--crema);
-      color: var(--gris-texto);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+    /* HERO */
+    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; background: var(--verde); }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 20% 30%, rgba(45,106,79,0.6) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 80% 70%, rgba(82,183,136,0.25) 0%, transparent 55%), radial-gradient(ellipse 40% 40% at 50% 10%, rgba(201,168,76,0.15) 0%, transparent 50%); animation: heroShift 12s ease-in-out infinite alternate; }
+    @keyframes heroShift { 0% { opacity:1; transform:scale(1) translateX(0); } 100% { opacity:.85; transform:scale(1.06) translateX(-2%); } }
+    .hero::after { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(-45deg, transparent, transparent 60px, rgba(201,168,76,0.04) 60px, rgba(201,168,76,0.04) 61px); pointer-events: none; }
+    .hero-content { position: relative; z-index: 2; padding: 2rem 1.5rem; max-width: 900px; }
+    .hero-badge { display: inline-block; background: rgba(201,168,76,0.18); border: 1px solid rgba(201,168,76,0.5); color: var(--oro-claro); font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase; padding: 0.45rem 1.4rem; border-radius: 50px; margin-bottom: 1.8rem; animation: fadeDown 0.8s ease both; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 300; color: var(--blanco); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 0.5rem; animation: fadeDown 0.9s 0.1s ease both; }
+    .hero h1 em { font-style: italic; color: var(--oro-claro); }
+    .hero-sub { font-size: clamp(1rem, 2.5vw, 1.25rem); font-weight: 300; color: rgba(255,255,255,0.72); margin-bottom: 2.5rem; animation: fadeDown 1s 0.2s ease both; line-height: 1.7; }
+    .hero-cta { display: inline-block; background: var(--oro); color: var(--verde); font-weight: 600; font-size: 0.92rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 1rem 2.8rem; border-radius: 50px; text-decoration: none; transition: var(--trans); animation: fadeDown 1.1s 0.3s ease both; box-shadow: 0 4px 20px rgba(201,168,76,0.4); }
+    .hero-cta:hover { background: var(--oro-claro); box-shadow: 0 8px 32px rgba(201,168,76,0.55); transform: translateY(-3px); }
+    .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; color: rgba(255,255,255,0.45); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; animation: fadeDown 1.5s 0.5s ease both; }
+    .scroll-hint .mouse { width: 22px; height: 36px; border: 2px solid rgba(255,255,255,0.35); border-radius: 12px; display: flex; align-items: flex-start; justify-content: center; padding-top: 5px; }
+    .scroll-hint .mouse::after { content: ''; width: 3px; height: 8px; background: rgba(255,255,255,0.5); border-radius: 2px; animation: scroll 1.8s infinite; }
+    @keyframes scroll { 0% { opacity:1; transform:translateY(0); } 100% { opacity:0; transform:translateY(10px); } }
 
-    /* =============================================
-       HERO HEADER
-    ============================================= */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
-      background: var(--verde);
-    }
-
-    /* Fondo animado con gradiente + partículas sutiles */
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(45,106,79,0.6) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 70%, rgba(82,183,136,0.25) 0%, transparent 55%),
-        radial-gradient(ellipse 40% 40% at 50% 10%, rgba(201,168,76,0.15) 0%, transparent 50%);
-      animation: heroShift 12s ease-in-out infinite alternate;
-    }
-    @keyframes heroShift {
-      0%   { opacity: 1; transform: scale(1) translateX(0); }
-      100% { opacity: 0.85; transform: scale(1.06) translateX(-2%); }
-    }
-
-    /* Líneas decorativas diagonales */
-    .hero::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        repeating-linear-gradient(
-          -45deg,
-          transparent,
-          transparent 60px,
-          rgba(201,168,76,0.04) 60px,
-          rgba(201,168,76,0.04) 61px
-        );
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      padding: 2rem 1.5rem;
-      max-width: 900px;
-    }
-
-    .hero-badge {
-      display: inline-block;
-      background: rgba(201,168,76,0.18);
-      border: 1px solid rgba(201,168,76,0.5);
-      color: var(--oro-claro);
-      font-size: 0.75rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      padding: 0.45rem 1.4rem;
-      border-radius: 50px;
-      margin-bottom: 1.8rem;
-      animation: fadeDown 0.8s ease both;
-    }
-
-    .hero h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      font-weight: 300;
-      color: var(--blanco);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-      animation: fadeDown 0.9s 0.1s ease both;
-    }
-
-    .hero h1 em {
-      font-style: italic;
-      color: var(--oro-claro);
-    }
-
-    .hero-sub {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      font-weight: 300;
-      color: rgba(255,255,255,0.72);
-      margin-bottom: 2.5rem;
-      animation: fadeDown 1s 0.2s ease both;
-      line-height: 1.7;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--oro);
-      color: var(--verde);
-      font-weight: 600;
-      font-size: 0.92rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 1rem 2.8rem;
-      border-radius: 50px;
-      text-decoration: none;
-      transition: var(--trans);
-      animation: fadeDown 1.1s 0.3s ease both;
-      box-shadow: 0 4px 20px rgba(201,168,76,0.4);
-    }
-    .hero-cta:hover {
-      background: var(--oro-claro);
-      box-shadow: 0 8px 32px rgba(201,168,76,0.55);
-      transform: translateY(-3px);
-    }
-
-    /* Scroll indicator */
-    .scroll-hint {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      color: rgba(255,255,255,0.45);
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      animation: fadeDown 1.5s 0.5s ease both;
-    }
-    .scroll-hint .mouse {
-      width: 22px; height: 36px;
-      border: 2px solid rgba(255,255,255,0.35);
-      border-radius: 12px;
-      display: flex; align-items: flex-start; justify-content: center;
-      padding-top: 5px;
-    }
-    .scroll-hint .mouse::after {
-      content: '';
-      width: 3px; height: 8px;
-      background: rgba(255,255,255,0.5);
-      border-radius: 2px;
-      animation: scroll 1.8s infinite;
-    }
-    @keyframes scroll {
-      0%   { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(10px); }
-    }
-
-    /* =============================================
-       SECCIONES GENERALES
-    ============================================= */
+    /* SECCIONES */
     section { padding: 5rem 1.5rem; }
+    .section-label { display: inline-block; color: var(--verde-claro); font-size: 0.73rem; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 600; margin-bottom: 0.8rem; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 600; color: var(--verde); line-height: 1.15; margin-bottom: 1rem; }
+    .section-desc { color: #6b7b6e; font-size: 1rem; line-height: 1.75; max-width: 550px; }
 
-    .section-label {
-      display: inline-block;
-      color: var(--verde-claro);
-      font-size: 0.73rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-    }
-
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 600;
-      color: var(--verde);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-
-    .section-desc {
-      color: #6b7b6e;
-      font-size: 1rem;
-      line-height: 1.75;
-      max-width: 550px;
-    }
-
-    /* =============================================
-       PROPIEDADES: TARJETAS 3D
-    ============================================= */
-    #propiedades {
-      background: var(--blanco);
-    }
-
-    .props-header {
-      max-width: 1200px;
-      margin: 0 auto 3.5rem;
-    }
-
-    /* Grid 3D con perspectiva */
-    .cards-scene {
-      perspective: 1400px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-    }
-
-    /* Tarjeta 5 centrada en su fila */
-    .cards-grid .card-wrap:nth-child(4) { grid-column: 1; }
-    .cards-grid .card-wrap:nth-child(5) { grid-column: 2; }
-
-    .card-wrap {
-      transform-style: preserve-3d;
-    }
-
-    .prop-card {
-      background: var(--blanco);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--sombra-card);
-      cursor: pointer;
-      transition: var(--trans);
-      transform-style: preserve-3d;
-      border: 2px solid transparent;
-      position: relative;
-      /* Animación de entrada escalonada */
-      opacity: 0;
-      transform: translateY(40px) rotateX(8deg);
-    }
-
-    .prop-card.visible {
-      animation: cardReveal 0.7s ease forwards;
-    }
-
-    .prop-card:nth-child(1) { animation-delay: 0.05s; }
-    .prop-card:nth-child(2) { animation-delay: 0.15s; }
-    .prop-card:nth-child(3) { animation-delay: 0.25s; }
-
-    @keyframes cardReveal {
-      to { opacity: 1; transform: translateY(0) rotateX(0deg); }
-    }
-
-    /* Efecto 3D al hover con JS */
-    .prop-card:hover {
-      box-shadow: 0 24px 60px rgba(26,58,42,0.22);
-    }
-
-    .prop-card.selected {
-      border-color: var(--oro);
-      box-shadow: 0 0 0 4px rgba(201,168,76,0.25), var(--sombra-card);
-    }
-
-    /* Ribbon "Seleccionado" */
-    .ribbon {
-      position: absolute;
-      top: 16px; right: -32px;
-      background: var(--oro);
-      color: var(--verde);
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.3rem 2.5rem;
-      transform: rotate(35deg);
-      z-index: 10;
-      opacity: 0;
-      transition: opacity 0.3s;
-      box-shadow: 0 2px 8px rgba(201,168,76,0.4);
-    }
+    /* TARJETAS */
+    #propiedades { background: var(--blanco); }
+    .props-header { max-width: 1200px; margin: 0 auto 3.5rem; }
+    .cards-scene { perspective: 1400px; max-width: 1200px; margin: 0 auto; }
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .card-wrap { transform-style: preserve-3d; }
+    .prop-card { background: var(--blanco); border-radius: var(--radius); overflow: hidden; box-shadow: var(--sombra-card); cursor: pointer; transition: var(--trans); transform-style: preserve-3d; border: 2px solid transparent; position: relative; opacity: 0; transform: translateY(40px) rotateX(8deg); }
+    .prop-card.visible { animation: cardReveal 0.7s ease forwards; }
+    @keyframes cardReveal { to { opacity:1; transform:translateY(0) rotateX(0deg); } }
+    .prop-card:hover { box-shadow: 0 24px 60px rgba(26,58,42,0.22); }
+    .prop-card.selected { border-color: var(--oro); box-shadow: 0 0 0 4px rgba(201,168,76,0.25), var(--sombra-card); }
+    .ribbon { position: absolute; top: 16px; right: -32px; background: var(--oro); color: var(--verde); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 2.5rem; transform: rotate(35deg); z-index: 10; opacity: 0; transition: opacity 0.3s; box-shadow: 0 2px 8px rgba(201,168,76,0.4); }
     .prop-card.selected .ribbon { opacity: 1; }
-
-    /* Imagen */
-    .card-img-wrap {
-      position: relative;
-      height: 210px;
-      overflow: hidden;
-    }
-
-    .card-img-wrap img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s ease;
-    }
-    .prop-card:hover .card-img-wrap img {
-      transform: scale(1.07);
-    }
-
-    /* Precio overlay */
-    .price-tag {
-      position: absolute;
-      bottom: 14px; left: 14px;
-      background: rgba(26,58,42,0.9);
-      color: var(--oro-claro);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      padding: 0.35rem 1rem;
-      border-radius: 8px;
-      backdrop-filter: blur(4px);
-    }
-
-    /* Estado badge */
-    .estado-badge {
-      position: absolute;
-      top: 14px; left: 14px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.28rem 0.85rem;
-      border-radius: 50px;
-    }
+    .card-img-wrap { position: relative; height: 210px; overflow: hidden; }
+    .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .prop-card:hover .card-img-wrap img { transform: scale(1.07); }
+    .price-tag { position: absolute; bottom: 14px; left: 14px; background: rgba(26,58,42,0.9); color: var(--oro-claro); font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; padding: 0.35rem 1rem; border-radius: 8px; backdrop-filter: blur(4px); }
+    .estado-badge { position: absolute; top: 14px; left: 14px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.28rem 0.85rem; border-radius: 50px; }
     .estado-disponible { background: rgba(82,183,136,0.9); color: white; }
     .estado-reservado  { background: rgba(220,80,60,0.88); color: white; }
+    .card-body-prop { padding: 1.4rem 1.5rem 1.6rem; }
+    .card-location { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--verde-claro); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .card-title-prop { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--verde); line-height: 1.3; margin-bottom: 1rem; }
+    .card-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    .cbadge { background: var(--crema); color: var(--verde); border: 1px solid rgba(26,58,42,0.12); font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.7rem; border-radius: 6px; }
+    .card-features { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.2rem; }
+    .card-features li { font-size: 0.82rem; color: #5a6b60; display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.45; }
+    .card-features li::before { content: '▸'; color: var(--verde-claro); flex-shrink: 0; margin-top: 1px; }
+    .btn-select { width: 100%; padding: 0.75rem; background: var(--verde); color: var(--blanco); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; cursor: pointer; transition: var(--trans); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .btn-select:hover { background: var(--verde-medio); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,58,42,0.25); }
+    .prop-card.selected .btn-select { background: var(--oro); color: var(--verde); }
+    .cards-row2 { display: flex; justify-content: center; gap: 2rem; max-width: 1200px; margin: 2rem auto 0; }
+    .cards-row2 .card-wrap { flex: 0 0 calc(33.333% - 1.333rem); max-width: 370px; }
 
-    /* Body de la tarjeta */
-    .card-body-prop {
-      padding: 1.4rem 1.5rem 1.6rem;
-    }
-
-    .card-location {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.75rem;
-      color: var(--verde-claro);
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-    .card-location svg { flex-shrink: 0; }
-
-    .card-title-prop {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--verde);
-      line-height: 1.3;
-      margin-bottom: 1rem;
-    }
-
-    /* Badges de datos clave */
-    .card-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 1rem;
-    }
-    .cbadge {
-      background: var(--crema);
-      color: var(--verde);
-      border: 1px solid rgba(26,58,42,0.12);
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 0.25rem 0.7rem;
-      border-radius: 6px;
-    }
-
-    /* Viñetas */
-    .card-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      margin-bottom: 1.2rem;
-    }
-    .card-features li {
-      font-size: 0.82rem;
-      color: #5a6b60;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-      line-height: 1.45;
-    }
-    .card-features li::before {
-      content: '▸';
-      color: var(--verde-claro);
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    /* Botón seleccionar */
-    .btn-select {
-      width: 100%;
-      padding: 0.75rem;
-      background: var(--verde);
-      color: var(--blanco);
-      border: none;
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      transition: var(--trans);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    .btn-select:hover {
-      background: var(--verde-medio);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(26,58,42,0.25);
-    }
-    .prop-card.selected .btn-select {
-      background: var(--oro);
-      color: var(--verde);
-    }
-
-    /* =============================================
-       FILA 2 de tarjetas (4 y 5) — centradas
-    ============================================= */
-    .cards-row2 {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 2rem auto 0;
-    }
-    .cards-row2 .card-wrap {
-      flex: 0 0 calc(33.333% - 1.333rem);
-      max-width: 370px;
-    }
-
-    /* =============================================
-       FORMULARIO DE RESERVA
-    ============================================= */
-    #reserva {
-      background: linear-gradient(160deg, var(--verde) 0%, #0e2419 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    #reserva::before {
-      content: '';
-      position: absolute;
-      top: -200px; right: -200px;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(82,183,136,0.1) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
-    .form-container {
-      max-width: 860px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .form-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 24px;
-      padding: 3rem 3.5rem;
-      backdrop-filter: blur(12px);
-    }
-
-    .form-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: 600;
-      color: var(--blanco);
-      margin-bottom: 0.4rem;
-    }
-    .form-subtitle {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.92rem;
-      margin-bottom: 2.5rem;
-    }
-
-    /* Selección activa resumen */
-    .selected-summary {
-      background: rgba(201,168,76,0.1);
-      border: 1px solid rgba(201,168,76,0.35);
-      border-radius: 12px;
-      padding: 1rem 1.4rem;
-      margin-bottom: 2rem;
-      color: var(--oro-claro);
-      font-size: 0.9rem;
-      display: none;
-    }
+    /* FORMULARIO */
+    #reserva { background: linear-gradient(160deg, var(--verde) 0%, #0e2419 100%); position: relative; overflow: hidden; }
+    #reserva::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(82,183,136,0.1) 0%, transparent 65%); pointer-events: none; }
+    .form-container { max-width: 860px; margin: 0 auto; position: relative; z-index: 2; }
+    .form-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 3rem 3.5rem; backdrop-filter: blur(12px); }
+    .form-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; color: var(--blanco); margin-bottom: 0.4rem; }
+    .form-subtitle { color: rgba(255,255,255,0.55); font-size: 0.92rem; margin-bottom: 2.5rem; }
+    .selected-summary { background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.35); border-radius: 12px; padding: 1rem 1.4rem; margin-bottom: 2rem; color: var(--oro-claro); font-size: 0.9rem; display: none; }
     .selected-summary.show { display: flex; align-items: center; gap: 0.7rem; }
     .selected-summary strong { color: var(--oro); }
-
-    /* Grid del formulario */
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
-    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
     .form-grid .full { grid-column: 1 / -1; }
-
-    label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.65);
-      margin-bottom: 0.5rem;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"],
-    input[type="date"],
-    textarea,
-    select {
-      width: 100%;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 10px;
-      color: var(--blanco);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      padding: 0.85rem 1.1rem;
-      transition: var(--trans);
-      outline: none;
-      -webkit-appearance: none;
-    }
+    label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 0.5rem; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea, select { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; padding: 0.85rem 1.1rem; transition: var(--trans); outline: none; -webkit-appearance: none; }
     input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
     input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--oro);
-      background: rgba(255,255,255,0.1);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
-    }
-
+    input:focus, select:focus, textarea:focus { border-color: var(--oro); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 3px rgba(201,168,76,0.15); }
     select option { background: var(--verde); color: white; }
-
-    /* Upload de archivo */
-    .upload-area {
-      border: 2px dashed rgba(255,255,255,0.2);
-      border-radius: 12px;
-      padding: 1.8rem;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--trans);
-      position: relative;
-    }
-    .upload-area:hover, .upload-area.drag-over {
-      border-color: var(--oro);
-      background: rgba(201,168,76,0.06);
-    }
-    .upload-area input[type="file"] {
-      position: absolute; inset: 0;
-      opacity: 0; cursor: pointer;
-      width: 100%; height: 100%;
-      padding: 0; background: none; border: none;
-    }
+    .upload-area { border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 1.8rem; text-align: center; cursor: pointer; transition: var(--trans); position: relative; }
+    .upload-area:hover, .upload-area.drag-over { border-color: var(--oro); background: rgba(201,168,76,0.06); }
+    .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; padding: 0; background: none; border: none; }
     .upload-area input[type="file"]:focus { box-shadow: none; }
     .upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
     .upload-text { color: rgba(255,255,255,0.6); font-size: 0.88rem; }
     .upload-text strong { color: var(--oro-claro); }
-    .upload-preview {
-      color: var(--verde-claro);
-      font-size: 0.82rem;
-      margin-top: 0.5rem;
-      font-weight: 600;
-    }
-
-    /* Botón submit */
-    .btn-submit {
-      width: 100%;
-      padding: 1.1rem 2rem;
-      background: linear-gradient(135deg, var(--oro) 0%, #b8922e 100%);
-      color: var(--verde);
-      border: none;
-      border-radius: 12px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: var(--trans);
-      position: relative;
-      overflow: hidden;
-      margin-top: 0.5rem;
-    }
-    .btn-submit:hover:not(:disabled) {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 35px rgba(201,168,76,0.45);
-    }
-    .btn-submit:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
-    .btn-submit .spinner {
-      display: inline-block;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(26,58,42,0.3);
-      border-top-color: var(--verde);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
+    .upload-preview { color: var(--verde-claro); font-size: 0.82rem; margin-top: 0.5rem; font-weight: 600; }
+    .upload-status { font-size: 0.8rem; margin-top: 0.5rem; color: var(--oro-claro); display: none; }
+    .btn-submit { width: 100%; padding: 1.1rem 2rem; background: linear-gradient(135deg, var(--oro) 0%, #b8922e 100%); color: var(--verde); border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: var(--trans); position: relative; overflow: hidden; margin-top: 0.5rem; }
+    .btn-submit:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 35px rgba(201,168,76,0.45); }
+    .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
+    .btn-submit .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(26,58,42,0.3); border-top-color: var(--verde); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* =============================================
-       MODAL DE RESULTADO
-    ============================================= */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(10,25,17,0.75);
-      backdrop-filter: blur(6px);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease;
-    }
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .modal-box {
-      background: var(--blanco);
-      border-radius: 20px;
-      padding: 2.5rem 2.8rem;
-      max-width: 500px;
-      width: 100%;
-      text-align: center;
-      transform: scale(0.88) translateY(20px);
-      transition: transform 0.35s cubic-bezier(.4,0,.2,1);
-      position: relative;
-    }
-    .modal-overlay.open .modal-box {
-      transform: scale(1) translateY(0);
-    }
-
-    .modal-icon {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .modal-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--verde);
-      margin-bottom: 0.6rem;
-    }
-
-    .modal-body-text {
-      color: #666;
-      font-size: 0.92rem;
-      line-height: 1.7;
-      margin-bottom: 1.8rem;
-    }
-
-    .modal-code {
-      display: inline-block;
-      background: var(--crema);
-      border: 2px solid var(--verde-claro);
-      color: var(--verde);
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 0.5rem 1.5rem;
-      border-radius: 10px;
-      letter-spacing: 0.1em;
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .btn-modal {
-      padding: 0.8rem 1.8rem;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.88rem;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: var(--trans);
-    }
-    .btn-modal-primary {
-      background: var(--verde);
-      color: white;
-    }
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(10,25,17,0.75); backdrop-filter: blur(6px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.35s ease; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box { background: var(--blanco); border-radius: 20px; padding: 2.5rem 2.8rem; max-width: 500px; width: 100%; text-align: center; transform: scale(0.88) translateY(20px); transition: transform 0.35s cubic-bezier(.4,0,.2,1); }
+    .modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
+    .modal-icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: var(--verde); margin-bottom: 0.6rem; }
+    .modal-body-text { color: #666; font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.8rem; }
+    .modal-code { display: inline-block; background: var(--crema); border: 2px solid var(--verde-claro); color: var(--verde); font-weight: 700; font-size: 1.1rem; padding: 0.5rem 1.5rem; border-radius: 10px; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
+    .modal-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-modal { padding: 0.8rem 1.8rem; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: var(--trans); }
+    .btn-modal-primary { background: var(--verde); color: white; }
     .btn-modal-primary:hover { background: var(--verde-medio); }
-    .btn-modal-wa {
-      background: #25d366;
-      color: white;
-    }
+    .btn-modal-wa { background: #25d366; color: white; }
     .btn-modal-wa:hover { background: #1ebe5a; }
-    .btn-modal-outline {
-      background: transparent;
-      color: var(--gris-texto);
-      border: 1px solid #ddd;
-    }
+    .btn-modal-outline { background: transparent; color: var(--gris-texto); border: 1px solid #ddd; }
     .btn-modal-outline:hover { background: #f5f5f5; }
-
-    /* Modal danger */
     .modal-box.danger .modal-title { color: #c0392b; }
-
-    /* Loading modal */
-    .modal-loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      color: var(--verde);
-    }
-    .loading-ring {
-      width: 54px; height: 54px;
-      border: 4px solid rgba(26,58,42,0.15);
-      border-top-color: var(--verde-claro);
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-    }
-    .loading-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
-      color: var(--verde);
-    }
+    .modal-loading { display: flex; flex-direction: column; align-items: center; gap: 1rem; color: var(--verde); }
+    .loading-ring { width: 54px; height: 54px; border: 4px solid rgba(26,58,42,0.15); border-top-color: var(--verde-claro); border-radius: 50%; animation: spin 0.9s linear infinite; }
+    .loading-text { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); }
     .loading-sub { font-size: 0.82rem; color: #999; }
 
-    /* =============================================
-       FOOTER
-    ============================================= */
-    footer {
-      background: var(--verde);
-      color: rgba(255,255,255,0.5);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.82rem;
-    }
+    /* FOOTER */
+    footer { background: var(--verde); color: rgba(255,255,255,0.5); text-align: center; padding: 2rem 1.5rem; font-size: 0.82rem; }
     footer strong { color: var(--oro-claro); }
 
-    /* =============================================
-       ANIMACIONES DE ENTRADA HERO
-    ============================================= */
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
 
-    /* =============================================
-       RESPONSIVE
-    ============================================= */
     @media (max-width: 900px) {
       .cards-grid { grid-template-columns: repeat(2, 1fr); }
-      .cards-grid .card-wrap:nth-child(4),
-      .cards-grid .card-wrap:nth-child(5) { grid-column: auto; }
       .cards-row2 { flex-wrap: wrap; }
       .cards-row2 .card-wrap { flex: 0 0 calc(50% - 1rem); }
     }
-
     @media (max-width: 640px) {
       .cards-grid { grid-template-columns: 1fr; }
       .cards-row2 { flex-direction: column; }
@@ -815,9 +162,7 @@
 </head>
 <body>
 
-  <!-- ================================================
-       HERO
-  ================================================ -->
+  <!-- HERO -->
   <section class="hero" id="inicio">
     <div class="hero-content">
       <div class="hero-badge">🏠 Bienes Raíces · Bolivia</div>
@@ -831,9 +176,7 @@
     </div>
   </section>
 
-  <!-- ================================================
-       PROPIEDADES
-  ================================================ -->
+  <!-- PROPIEDADES -->
   <section id="propiedades">
     <div class="props-header">
       <span class="section-label">Portafolio Exclusivo</span>
@@ -841,7 +184,6 @@
       <p class="section-desc">Haz clic en la propiedad que te interese para seleccionarla y proceder con tu reserva de visita.</p>
     </div>
 
-    <!-- Fila 1: 3 tarjetas -->
     <div class="cards-scene">
       <div class="cards-grid" id="cardsGrid">
 
@@ -943,7 +285,7 @@
 
       </div><!-- /cards-grid -->
 
-      <!-- Fila 2: tarjetas 4 y 5 centradas -->
+      <!-- Fila 2 -->
       <div class="cards-row2">
 
         <!-- TARJETA 4 -->
@@ -1013,37 +355,48 @@
     </div><!-- /cards-scene -->
   </section>
 
-  <!-- ================================================
-       FORMULARIO DE RESERVA
-  ================================================ -->
+  <!-- FORMULARIO DE RESERVA -->
   <section id="reserva">
     <div class="form-container">
       <span class="section-label" style="color:var(--verde-claro)">Paso Final</span>
       <h2 class="form-title">Completa tu Reserva</h2>
       <p class="form-subtitle">Tus datos están protegidos. Recibirás confirmación por correo electrónico.</p>
 
-      <!-- Resumen de propiedad seleccionada -->
       <div class="selected-summary" id="selectedSummary">
         <span>🏠</span>
         <span>Propiedad seleccionada: <strong id="summaryName">—</strong> · Monto de reserva: <strong id="summaryReserva">—</strong></span>
       </div>
 
       <div class="form-card">
-        <form id="formReserva" autocomplete="off" novalidate>
+        <!--
+          ACTION  → tu Apps Script URL (method POST, enctype multipart/form-data = igual al código 2)
+          El formulario hace submit nativo: no hay CORS, el Apps Script recibe todo correctamente.
+        -->
+        <form id="formReserva"
+              action="https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec"
+              method="POST"
+              enctype="multipart/form-data"
+              novalidate>
 
-          <!-- Input oculto: ID del terreno seleccionado -->
-          <input type="hidden" id="idTerrenoSeleccionado" name="idTerreno" />
+          <!-- Campos ocultos que el Apps Script necesita -->
+          <input type="hidden" name="accion"       value="nueva_reserva" />
+          <input type="hidden" name="idTerreno"    id="idTerrenoSeleccionado" />
+          <input type="hidden" name="nombreProp"   id="nombrePropHidden" />
+          <input type="hidden" name="precioProp"   id="precioPropHidden" />
+          <input type="hidden" name="reservaMonto" id="reservaMontoHidden" />
+          <!-- URL del CI subido a Cloudinary (se llena antes del submit) -->
+          <input type="hidden" name="url_documento" id="url_documento" />
 
           <div class="form-grid">
 
             <div>
               <label for="nombre">Nombre</label>
-              <input type="text" id="nombre" name="nombre" placeholder="Carlos" required />
+              <input type="text" id="nombre" name="nombre" placeholder="Carlos" required minlength="2" />
             </div>
 
             <div>
               <label for="apellido">Apellido</label>
-              <input type="text" id="apellido" name="apellido" placeholder="Machaca" required />
+              <input type="text" id="apellido" name="apellido" placeholder="Machaca" required minlength="2" />
             </div>
 
             <div>
@@ -1079,7 +432,7 @@
               <textarea id="observacion" name="observacion" rows="3" placeholder="¿Alguna pregunta o comentario antes de tu visita?"></textarea>
             </div>
 
-            <!-- Upload documento de identidad -->
+            <!-- Upload CI -->
             <div class="full">
               <label>Documento de Identidad (CI, PDF o Imagen)</label>
               <div class="upload-area" id="uploadArea">
@@ -1087,101 +440,71 @@
                 <div class="upload-icon">📎</div>
                 <div class="upload-text"><strong>Haz clic o arrastra</strong> tu documento aquí</div>
                 <div class="upload-text">PNG, JPG o PDF · Máx. 5MB</div>
-                <div class="upload-preview" id="uploadPreview"></div>
               </div>
+              <div class="upload-preview" id="uploadPreview"></div>
+              <div class="upload-status" id="uploadStatus"></div>
             </div>
 
-          </div><!-- /form-grid -->
+          </div>
 
           <div style="margin-top:1.8rem;">
-            <button type="submit" class="btn-submit" id="btnSubmit">
-              Confirmar Reserva &rarr;
+            <button type="button" class="btn-submit" id="btnSubmit" onclick="validarYEnviar()">
+              <span id="btnText">Confirmar Reserva &rarr;</span>
+              <span id="btnLoading" style="display:none;"><span class="spinner"></span> Procesando…</span>
             </button>
           </div>
         </form>
-      </div><!-- /form-card -->
+      </div>
     </div>
   </section>
 
-  <!-- ================================================
-       FOOTER
-  ================================================ -->
+  <!-- FOOTER -->
   <footer>
     <strong>BienesCasas Bolivia</strong> &nbsp;·&nbsp; Sistema de Reservas Online<br>
     <span style="color:rgba(255,255,255,0.3); font-size:0.75rem;">Todos los derechos reservados &copy; 2025</span>
   </footer>
 
-  <!-- ================================================
-       MODAL DE RESULTADO
-  ================================================ -->
+  <!-- MODAL -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-box" id="modalBox">
-      <div id="modalContent">
-        <!-- Se llena dinámicamente -->
-      </div>
+      <div id="modalContent"></div>
     </div>
   </div>
 
-
-  <!-- ================================================
-       JAVASCRIPT
-  ================================================ -->
   <script>
-    // ============================================================
-    // CONFIGURACIÓN
-    // ============================================================
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec";
-    const WHATSAPP_NUM    = "59171979648";
+    // ── CONFIG ─────────────────────────────────────────────
+    const CLOUDINARY_CLOUD  = 'dpfoul2dc';
+    const CLOUDINARY_PRESET = 'Unsigned'; // preset sin firma, igual que el código 2
+    const WHATSAPP_NUM      = '59171979648';
 
-    const CLOUDINARY_CLOUD  = "dpfoul2dc";
-    const CLOUDINARY_APIKEY = "618524146861813";
-
-    // ============================================================
-    // FECHA MÍNIMA HOY
-    // ============================================================
+    // ── FECHA MÍNIMA HOY ───────────────────────────────────
     document.getElementById('fecha').min = new Date().toISOString().split('T')[0];
 
-    // ============================================================
-    // ANIMACIÓN TARJETAS AL ENTRAR EN VIEWPORT (IntersectionObserver)
-    // ============================================================
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
+    // ── INTERSECTION OBSERVER (animación tarjetas) ─────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
       });
     }, { threshold: 0.15 });
+    document.querySelectorAll('.prop-card').forEach(c => observer.observe(c));
 
-    document.querySelectorAll('.prop-card').forEach(card => observer.observe(card));
-
-    // ============================================================
-    // EFECTO 3D MOUSEMOVE EN TARJETAS
-    // ============================================================
+    // ── EFECTO 3D HOVER ────────────────────────────────────
     document.querySelectorAll('.prop-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const cx = rect.left + rect.width  / 2;
-        const cy = rect.top  + rect.height / 2;
-        const dx = (e.clientX - cx) / (rect.width  / 2);
-        const dy = (e.clientY - cy) / (rect.height / 2);
+      card.addEventListener('mousemove', e => {
+        const r  = card.getBoundingClientRect();
+        const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+        const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
         card.style.transform = `rotateY(${dx * 10}deg) rotateX(${-dy * 8}deg) translateZ(8px)`;
       });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
     });
 
-    // ============================================================
-    // SELECCIÓN DE PROPIEDAD
-    // ============================================================
+    // ── SELECCIÓN DE PROPIEDAD ─────────────────────────────
     let propiedadSeleccionada = null;
 
     function seleccionarPropiedad(btn) {
       const card = btn.closest('.prop-card');
-      // Deseleccionar todas
       document.querySelectorAll('.prop-card').forEach(c => c.classList.remove('selected'));
-      // Seleccionar esta
       card.classList.add('selected');
 
       propiedadSeleccionada = {
@@ -1191,51 +514,72 @@
         reserva: card.dataset.reserva
       };
 
+      // Rellenar campos ocultos
       document.getElementById('idTerrenoSeleccionado').value = propiedadSeleccionada.id;
+      document.getElementById('nombrePropHidden').value      = propiedadSeleccionada.nombre;
+      document.getElementById('precioPropHidden').value      = propiedadSeleccionada.precio;
+      document.getElementById('reservaMontoHidden').value    = propiedadSeleccionada.reserva;
 
-      // Actualizar resumen
+      // Resumen visual
       document.getElementById('summaryName').textContent    = propiedadSeleccionada.nombre;
       document.getElementById('summaryReserva').textContent = propiedadSeleccionada.reserva;
       document.getElementById('selectedSummary').classList.add('show');
 
-      // Scroll al formulario suavemente
       setTimeout(() => {
         document.getElementById('reserva').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 200);
     }
 
-    // ============================================================
-    // PREVIEW DE ARCHIVO SUBIDO
-    // ============================================================
-    const fileInput   = document.getElementById('fileDocumento');
-    const uploadArea  = document.getElementById('uploadArea');
+    // ── PREVIEW ARCHIVO ────────────────────────────────────
+    const fileInput    = document.getElementById('fileDocumento');
+    const uploadArea   = document.getElementById('uploadArea');
     const uploadPreview = document.getElementById('uploadPreview');
+    const uploadStatus  = document.getElementById('uploadStatus');
 
     fileInput.addEventListener('change', () => {
-      if (fileInput.files.length > 0) {
-        const f = fileInput.files[0];
-        uploadPreview.textContent = `✔ ${f.name} (${(f.size / 1024).toFixed(1)} KB)`;
-        uploadArea.style.borderColor = 'var(--oro)';
+      if (!fileInput.files.length) return;
+      const f = fileInput.files[0];
+      if (f.size > 5 * 1024 * 1024) {
+        uploadPreview.textContent = '⚠ Archivo demasiado grande (máx. 5 MB)';
+        fileInput.value = '';
+        return;
       }
+      uploadPreview.textContent     = `✔ ${f.name} (${(f.size / 1024).toFixed(1)} KB)`;
+      uploadArea.style.borderColor  = 'var(--oro)';
+      uploadStatus.style.display    = 'none';
     });
 
-    // Drag & drop visual
-    uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
-    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+    uploadArea.addEventListener('dragover',  e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+    uploadArea.addEventListener('dragleave', ()  => uploadArea.classList.remove('drag-over'));
     uploadArea.addEventListener('drop', e => {
       e.preventDefault();
       uploadArea.classList.remove('drag-over');
-      if (e.dataTransfer.files.length > 0) {
+      if (e.dataTransfer.files.length) {
         fileInput.files = e.dataTransfer.files;
         fileInput.dispatchEvent(new Event('change'));
       }
     });
 
-    // ============================================================
-    // MODAL HELPERS
-    // ============================================================
-    const overlay  = document.getElementById('modalOverlay');
-    const modalBox = document.getElementById('modalBox');
+    // ── SUBIR A CLOUDINARY (unsigned preset) ───────────────
+    // Igual al código 2: sin firma, sin exponer API Secret en frontend.
+    async function subirACloudinary(file) {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', CLOUDINARY_PRESET);
+      fd.append('folder', 'documentos_reservas');
+
+      const resp = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/auto/upload`, {
+        method: 'POST',
+        body: fd
+      });
+      const data = await resp.json();
+      if (data.secure_url) return data.secure_url;
+      throw new Error(data.error?.message || 'Error Cloudinary');
+    }
+
+    // ── MODAL ──────────────────────────────────────────────
+    const overlay      = document.getElementById('modalOverlay');
+    const modalBox     = document.getElementById('modalBox');
     const modalContent = document.getElementById('modalContent');
 
     function abrirModal(html, danger = false) {
@@ -1243,15 +587,8 @@
       modalBox.className = 'modal-box' + (danger ? ' danger' : '');
       overlay.classList.add('open');
     }
-
-    function cerrarModal() {
-      overlay.classList.remove('open');
-    }
-
-    // Cerrar al hacer clic fuera del box
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) cerrarModal();
-    });
+    function cerrarModal() { overlay.classList.remove('open'); }
+    overlay.addEventListener('click', e => { if (e.target === overlay) cerrarModal(); });
 
     function mostrarCargando(msg) {
       abrirModal(`
@@ -1263,85 +600,48 @@
       `);
     }
 
-    // ============================================================
-    // SUBIR DOCUMENTO A CLOUDINARY (firmado con API Key + Secret)
-    // ============================================================
-    async function subirACloudinary(file) {
-      const timestamp  = Math.round(Date.now() / 1000);
-      const apiSecret  = "qrjQV_8RC3OrAOhMIJSnFpUL_AA";
-      const cadena     = `folder=documentos_reservas&timestamp=${timestamp}${apiSecret}`;
-      const encoder    = new TextEncoder();
-      const hashBuffer = await crypto.subtle.digest('SHA-1', encoder.encode(cadena));
-      const firma      = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2,'0')).join('');
-
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('api_key', CLOUDINARY_APIKEY);
-      fd.append('timestamp', timestamp);
-      fd.append('folder', 'documentos_reservas');
-      fd.append('signature', firma);
-
-      const resp = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/auto/upload`, {
-        method: 'POST',
-        body: fd
-      });
-
-      if (!resp.ok) throw new Error('Error al subir documento a Cloudinary.');
-      const data = await resp.json();
-      return data.secure_url;
+    // ── BOTÓN LOADING STATE ────────────────────────────────
+    function setBtnLoading(on) {
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = on;
+      document.getElementById('btnText').style.display    = on ? 'none'   : 'inline';
+      document.getElementById('btnLoading').style.display = on ? 'inline' : 'none';
     }
 
-    // ============================================================
-    // ENVIAR AL APPS SCRIPT VÍA IFRAME OCULTO
-    // Sin CORS, sin ventana muerta. El iframe dispara el GET
-    // silenciosamente y el Apps Script registra todo en Sheets.
-    // ============================================================
-    function enviarAlAppsScript(params) {
-      return new Promise((resolve) => {
-        const qs  = new URLSearchParams(params).toString();
-        const url = `${APPS_SCRIPT_URL}?${qs}`;
-
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = url;
-
-        // Esperamos 4 segundos para que el Apps Script procese
-        iframe.onload = () => setTimeout(() => {
-          document.body.removeChild(iframe);
-          resolve();
-        }, 1000);
-
-        // Fallback: si no carga en 6s, resolver igual
-        setTimeout(() => {
-          if (document.body.contains(iframe)) document.body.removeChild(iframe);
-          resolve();
-        }, 6000);
-
-        document.body.appendChild(iframe);
-      });
-    }
-
-    // ============================================================
-    // SUBMIT DEL FORMULARIO — Flujo principal
-    // ============================================================
-    document.getElementById('formReserva').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      // 1. Validar que se seleccionó una propiedad
+    // ── VALIDAR Y ENVIAR ───────────────────────────────────
+    // Misma lógica del código 2:
+    //   1. Validar propiedad y campos
+    //   2. Subir CI a Cloudinary → guardar URL en campo oculto
+    //   3. form.submit() nativo → el browser envía al Apps Script sin CORS
+    async function validarYEnviar() {
+      // Validar propiedad seleccionada
       if (!propiedadSeleccionada) {
         abrirModal(`
           <span class="modal-icon">⚠️</span>
           <div class="modal-title">Selecciona una propiedad</div>
-          <p class="modal-body-text">Por favor haz clic en el botón <strong>"Seleccionar Propiedad"</strong> de la casa que te interesa antes de continuar.</p>
+          <p class="modal-body-text">Haz clic en <strong>"Seleccionar Propiedad"</strong> de la casa que te interesa antes de continuar.</p>
           <div class="modal-actions">
             <button class="btn-modal btn-modal-outline" onclick="cerrarModal(); document.getElementById('propiedades').scrollIntoView({behavior:'smooth'})">Ver propiedades</button>
           </div>
-        `, false);
+        `);
         return;
       }
 
-      // 2. Validar archivo
-      if (fileInput.files.length === 0) {
+      // Validar campos del formulario
+      const form = document.getElementById('formReserva');
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        // Marcar visualmente los inválidos
+        form.querySelectorAll(':invalid').forEach(el => {
+          el.style.borderColor = '#e74c3c';
+          el.addEventListener('input', () => { el.style.borderColor = ''; }, { once: true });
+        });
+        form.querySelector(':invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      // Validar archivo CI
+      if (!fileInput.files.length) {
         abrirModal(`
           <span class="modal-icon">📎</span>
           <div class="modal-title">Adjunta tu documento</div>
@@ -1349,92 +649,31 @@
           <div class="modal-actions">
             <button class="btn-modal btn-modal-outline" onclick="cerrarModal()">Entendido</button>
           </div>
-        `, false);
+        `);
         return;
       }
 
-      // 3. Deshabilitar botón
-      const btn = document.getElementById('btnSubmit');
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span> Procesando…';
+      setBtnLoading(true);
 
-      // 4. Paso 1: Subir documento a Cloudinary
-      mostrarCargando('Subiendo documento…');
-      let urlDocumento;
+      // Paso 1: subir CI a Cloudinary
+      mostrarCargando('Subiendo documento de identidad…');
+      uploadStatus.textContent   = '⏳ Subiendo documento…';
+      uploadStatus.style.display = 'block';
+
       try {
-        urlDocumento = await subirACloudinary(fileInput.files[0]);
+        const url = await subirACloudinary(fileInput.files[0]);
+        document.getElementById('url_documento').value = url;
+        uploadStatus.textContent = '✔ Documento subido correctamente';
       } catch (err) {
-        abrirModal(`
-          <span class="modal-icon">❌</span>
-          <div class="modal-title">Error al subir documento</div>
-          <p class="modal-body-text">No pudimos subir tu documento de identidad. Verifica tu conexión e intenta nuevamente.</p>
-          <div class="modal-actions">
-            <button class="btn-modal btn-modal-outline" onclick="cerrarModal()">Intentar de nuevo</button>
-          </div>
-        `, true);
-        btn.disabled = false;
-        btn.innerHTML = 'Confirmar Reserva &rarr;';
-        return;
+        uploadStatus.textContent = '⚠ No se pudo subir el documento, se enviará sin él.';
+        document.getElementById('url_documento').value = 'Sin documento';
+        console.warn('Cloudinary error:', err);
       }
 
-      // 5. Paso 2: Recopilar datos del formulario
-      mostrarCargando('Registrando reserva…');
-
-      const datos = {
-        idTerreno:   document.getElementById('idTerrenoSeleccionado').value,
-        nombre:      document.getElementById('nombre').value.trim(),
-        apellido:    document.getElementById('apellido').value.trim(),
-        correo:      document.getElementById('correo').value.trim(),
-        telefono:    document.getElementById('telefono').value.trim(),
-        fecha:       document.getElementById('fecha').value,
-        hora:        document.getElementById('hora').value,
-        observacion: document.getElementById('observacion').value.trim(),
-        urlDocumento: urlDocumento
-      };
-
-      // 6. Paso 3: Enviar al Apps Script via GET (no-cors, sin bloqueo CORS)
-      try {
-        await enviarAlAppsScript(datos);
-      } catch (err) {
-        // No podemos distinguir éxito/fallo con no-cors, así que asumimos éxito
-        // si no hubo error de red total.
-        console.warn('Fetch no-cors completado (sin lectura de respuesta).');
-      }
-
-      // 7. Generar código de reserva local para UX inmediata
-      const hoy = new Date();
-      const yyyy = hoy.getFullYear();
-      const mm   = String(hoy.getMonth() + 1).padStart(2, '0');
-      const dd   = String(hoy.getDate()).padStart(2, '0');
-      const rand = String(Math.floor(Math.random() * 9000) + 1000);
-      const codigoLocal = `CLI-${yyyy}${mm}${dd}-${rand}`;
-
-      const msgWA = encodeURIComponent(
-        `¡Hola! 🏠 Acabo de reservar la propiedad *${propiedadSeleccionada.nombre}* para el *${datos.fecha}* a las *${datos.hora}*. Mi código de reserva es *${codigoLocal}*. Quedo a la espera de confirmación. — ${datos.nombre} ${datos.apellido}`
-      );
-      const waUrl = `https://wa.me/${WHATSAPP_NUM}?text=${msgWA}`;
-
-      // 8. Mostrar modal de ÉXITO
-      abrirModal(`
-        <span class="modal-icon">🎉</span>
-        <div class="modal-title">¡Reserva Enviada!</div>
-        <p class="modal-body-text">
-          Hola <strong>${datos.nombre}</strong>, tu solicitud de visita para<br>
-          <strong>${propiedadSeleccionada.nombre}</strong><br>
-          fue registrada para el <strong>${datos.fecha}</strong> a las <strong>${datos.hora}</strong>.<br><br>
-          Un asesor confirmará tu cita por correo o WhatsApp.
-        </p>
-        <div class="modal-code">${codigoLocal}</div>
-        <div class="modal-actions">
-          <a href="${waUrl}" target="_blank" class="btn-modal btn-modal-wa">💬 WhatsApp</a>
-          <button class="btn-modal btn-modal-outline" onclick="cerrarModal(); document.getElementById('formReserva').reset(); document.querySelectorAll('.prop-card').forEach(c=>c.classList.remove('selected')); document.getElementById('selectedSummary').classList.remove('show'); propiedadSeleccionada=null; uploadPreview.textContent=''; uploadArea.style.borderColor=''; document.getElementById('btnSubmit').disabled=false; document.getElementById('btnSubmit').innerHTML='Confirmar Reserva &rarr;'">Cerrar</button>
-        </div>
-      `);
-
-      btn.disabled = false;
-      btn.innerHTML = 'Confirmar Reserva &rarr;';
-    });
-
+      // Paso 2: submit nativo → Apps Script recibe todos los campos
+      mostrarCargando('Registrando reserva en el sistema…');
+      form.submit(); // el browser redirige internamente; Apps Script responde con HTML redirect
+    }
   </script>
 </body>
 </html>
