@@ -368,8 +368,17 @@
       </div>
 
       <div class="form-card">
-        <!-- ✅ SIN action/method en el <form> — el envío lo hace fetch() en JS -->
-        <form id="formReserva" novalidate>
+        <!-- Submit nativo igual que WebJuan: sin CORS, Google redirect funciona solo -->
+        <form id="formReserva"
+              action="https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec"
+              method="POST"
+              enctype="multipart/form-data"
+              novalidate>
+
+          <!-- Campos ocultos — igual que WebJuan -->
+          <input type="hidden" name="accion"        value="nueva_reserva" />
+          <input type="hidden" name="idTerreno"     id="idTerrenoSeleccionado" />
+          <input type="hidden" name="url_documento" id="url_documento" value="Sin documento" />
 
           <div class="form-grid">
 
@@ -457,8 +466,6 @@
 
   <script>
     // ── CONFIG ──────────────────────────────────────────────────────────────
-    // ✅ CORRECCIÓN: URL del Apps Script DESPLEGADO (no de edición)
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec';
     const CLOUDINARY_CLOUD  = 'dpfoul2dc';
     const CLOUDINARY_PRESET = 'Unsigned';
     const WHATSAPP_NUM      = '59171979648';
@@ -587,13 +594,13 @@
     }
 
     // ── VALIDAR Y ENVIAR ──────────────────────────────────────────────────────
-    // ✅ CORRECCIÓN PRINCIPAL:
-    //   1. Subir CI a Cloudinary → obtener URL
-    //   2. Construir FormData con todos los campos
-    //   3. fetch() POST al Apps Script (no form.submit())
-    //   4. Apps Script devuelve HtmlOutput → mostramos modal con resultado
+    // Patrón idéntico a WebJuan (que funciona sin CORS):
+    //   1. Validaciones en JS
+    //   2. fetch() solo para Cloudinary (no tiene CORS)
+    //   3. Guardar URL en campo hidden
+    //   4. form.submit() nativo → browser sigue el redirect de Google sin problema
     async function validarYEnviar() {
-      // Validar propiedad
+      // Validar propiedad seleccionada
       if (!propiedadSeleccionada) {
         abrirModal(`
           <span class="modal-icon">⚠️</span>
@@ -606,8 +613,11 @@
         return;
       }
 
-      // Validar campos del formulario
-      const form = document.getElementById('formReserva');
+      // Llenar campo oculto con el id de la propiedad seleccionada
+      document.getElementById('idTerrenoSeleccionado').value = propiedadSeleccionada.id;
+
+      // Validar campos requeridos
+      const form   = document.getElementById('formReserva');
       const campos = ['nombre','apellido','correo','telefono','fecha','hora'];
       let hayError = false;
       campos.forEach(id => {
@@ -615,16 +625,13 @@
         if (!el.value.trim()) {
           el.style.borderColor = '#e74c3c';
           el.addEventListener('input', () => { el.style.borderColor = ''; }, { once: true });
+          if (!hayError) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
           hayError = true;
         }
       });
-      if (hayError) {
-        document.getElementById(campos.find(id => !document.getElementById(id).value.trim()))
-                ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
+      if (hayError) return;
 
-      // Validar archivo CI
+      // Validar CI adjunto
       if (!fileInput.files.length) {
         abrirModal(`
           <span class="modal-icon">📎</span>
@@ -639,116 +646,24 @@
 
       setBtnLoading(true);
 
-      // Paso 1: subir CI a Cloudinary
+      // Paso 1: subir CI a Cloudinary (fetch solo aquí, no tiene problema de CORS)
       mostrarCargando('Subiendo documento de identidad…');
       uploadStatus.textContent   = '⏳ Subiendo documento…';
       uploadStatus.style.display = 'block';
 
-      let urlDocumento = 'Sin documento';
       try {
-        urlDocumento = await subirACloudinary(fileInput.files[0]);
+        const url = await subirACloudinary(fileInput.files[0]);
+        document.getElementById('url_documento').value = url;
         uploadStatus.textContent = '✔ Documento subido correctamente';
       } catch (err) {
         uploadStatus.textContent = '⚠ No se pudo subir el documento, se enviará sin él.';
+        document.getElementById('url_documento').value = 'Sin documento';
         console.warn('Cloudinary error:', err);
       }
 
-      // Paso 2: ✅ Construir FormData y enviar con fetch()
+      // Paso 2: submit nativo — igual que WebJuan, sin CORS, Google redirect OK
       mostrarCargando('Registrando reserva en el sistema…');
-
-      const fd = new FormData();
-      fd.append('accion',        'nueva_reserva');
-      fd.append('idTerreno',     propiedadSeleccionada.id);
-      fd.append('nombre',        document.getElementById('nombre').value.trim());
-      fd.append('apellido',      document.getElementById('apellido').value.trim());
-      fd.append('correo',        document.getElementById('correo').value.trim());
-      fd.append('telefono',      document.getElementById('telefono').value.trim());
-      fd.append('fecha',         document.getElementById('fecha').value);
-      fd.append('hora',          document.getElementById('hora').value);
-      fd.append('observacion',   document.getElementById('observacion').value.trim());
-      fd.append('url_documento', urlDocumento);
-
-      try {
-        // ✅ fetch con no-cors no devuelve body; usamos mode:'cors' ya que Apps Script
-        //    responde con HtmlOutput (texto HTML). Leemos el texto y lo mostramos.
-        const response = await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          body: fd
-          // ⚠ NO incluir headers Content-Type: el browser lo pone solo con boundary
-        });
-
-        const texto = await response.text();
-
-        cerrarModal();
-        setBtnLoading(false);
-
-        // Apps Script devuelve una página HTML de respuesta — la abrimos en nueva pestaña
-        // y mostramos modal de éxito en la misma página.
-        if (texto.includes('SUCCESS') || texto.includes('Reserva Confirmada') || texto.includes('Confirmada')) {
-          // Extraer código CLI del HTML si viene
-          const matchCodigo = texto.match(/CLI-\d{8}-\d{4}/);
-          const idCliente   = matchCodigo ? matchCodigo[0] : '—';
-
-          const waUrl = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(
-            '¡Hola! Acabo de reservar una propiedad en BienesCasas Bolivia. Mi código es ' + idCliente
-          )}`;
-
-          abrirModal(`
-            <span class="modal-icon">✅</span>
-            <div class="modal-title">¡Reserva Confirmada!</div>
-            <p class="modal-body-text">Tu reserva para <strong>${propiedadSeleccionada.nombre}</strong> fue procesada exitosamente.</p>
-            <div class="modal-code">${idCliente}</div>
-            <p class="modal-body-text" style="font-size:.82rem">Revisa tu correo para el comprobante.</p>
-            <div class="modal-actions">
-              <a href="${waUrl}" target="_blank" class="btn-modal btn-modal-wa">💬 WhatsApp</a>
-              <button class="btn-modal btn-modal-outline" onclick="cerrarModal()">Cerrar</button>
-            </div>
-          `);
-
-          // Resetear formulario
-          form.reset();
-          propiedadSeleccionada = null;
-          document.querySelectorAll('.prop-card').forEach(c => c.classList.remove('selected'));
-          document.getElementById('selectedSummary').classList.remove('show');
-          uploadPreview.textContent = '';
-
-        } else if (texto.includes('CONFLICT') || texto.includes('no disponible')) {
-          abrirModal(`
-            <span class="modal-icon">⚠️</span>
-            <div class="modal-title">Propiedad no disponible</div>
-            <p class="modal-body-text">Esta propiedad ya fue reservada. Por favor selecciona otra o contáctanos.</p>
-            <div class="modal-actions">
-              <button class="btn-modal btn-modal-outline" onclick="cerrarModal(); document.getElementById('propiedades').scrollIntoView({behavior:'smooth'})">Ver otras</button>
-            </div>
-          `, true);
-
-        } else {
-          // Respuesta inesperada — abrir en pestaña para ver el HTML completo
-          const win = window.open('', '_blank');
-          win.document.write(texto);
-          abrirModal(`
-            <span class="modal-icon">ℹ️</span>
-            <div class="modal-title">Solicitud enviada</div>
-            <p class="modal-body-text">Tu reserva fue enviada. Revisa la pestaña que se abrió para ver el resultado, o espera el correo de confirmación.</p>
-            <div class="modal-actions">
-              <button class="btn-modal btn-modal-outline" onclick="cerrarModal()">Cerrar</button>
-            </div>
-          `);
-        }
-
-      } catch (err) {
-        cerrarModal();
-        setBtnLoading(false);
-        console.error('Error al enviar:', err);
-        abrirModal(`
-          <span class="modal-icon">❌</span>
-          <div class="modal-title">Error de conexión</div>
-          <p class="modal-body-text">No se pudo conectar con el servidor. Verifica tu internet e intenta de nuevo.<br><small style="color:#999">${err.message}</small></p>
-          <div class="modal-actions">
-            <button class="btn-modal btn-modal-primary" onclick="cerrarModal()">Reintentar</button>
-          </div>
-        `, true);
-      }
+      form.submit();
     }
   </script>
 </body>
