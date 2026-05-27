@@ -94,7 +94,6 @@
     .prop-card.visible {
       animation: cardReveal 0.7s ease forwards, floatCard 6s ease-in-out infinite;
     }
-    /* Cada tarjeta flota con delay distinto */
     .card-wrap:nth-child(1) .prop-card.visible { animation-delay: 0s, 0s; }
     .card-wrap:nth-child(2) .prop-card.visible { animation-delay: 0.1s, 0.8s; }
     .card-wrap:nth-child(3) .prop-card.visible { animation-delay: 0.2s, 1.6s; }
@@ -108,13 +107,20 @@
       100% { transform: translateY(0px); }
     }
 
-    /* Sombra dinámica — se actualiza por JS */
-    .prop-card { --tilt-x: 0; --tilt-y: 0; }
-    .prop-card:hover { animation-play-state: running; }
-
-    .prop-card.selected { border-color: var(--oro); box-shadow: 0 0 0 4px rgba(201,168,76,0.25), var(--sombra-card); }
-    .ribbon { position: absolute; top: 16px; right: -32px; background: var(--oro); color: var(--verde); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 2.5rem; transform: rotate(35deg); z-index: 10; opacity: 0; transition: opacity 0.3s; box-shadow: 0 2px 8px rgba(201,168,76,0.4); }
+    /* ── MULTI-SELECT: tarjeta seleccionada ─────────────────────────── */
+    .prop-card.selected {
+      border-color: var(--oro);
+      box-shadow: 0 0 0 4px rgba(201,168,76,0.25), var(--sombra-card);
+    }
+    .ribbon {
+      position: absolute; top: 16px; right: -32px; background: var(--oro);
+      color: var(--verde); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; padding: 0.3rem 2.5rem;
+      transform: rotate(35deg); z-index: 10; opacity: 0; transition: opacity 0.3s;
+      box-shadow: 0 2px 8px rgba(201,168,76,0.4);
+    }
     .prop-card.selected .ribbon { opacity: 1; }
+
     .card-img-wrap { position: relative; height: 210px; overflow: hidden; }
     .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     .prop-card:hover .card-img-wrap img { transform: scale(1.07); }
@@ -130,12 +136,15 @@
     .card-features { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.2rem; }
     .card-features li { font-size: 0.82rem; color: #5a6b60; display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.45; }
     .card-features li::before { content: '▸'; color: var(--verde-claro); flex-shrink: 0; margin-top: 1px; }
-    .btn-select { width: 100%; padding: 0.75rem; background: var(--verde); color: var(--blanco); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; cursor: none; transition: var(--trans); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .btn-select {
+      width: 100%; padding: 0.75rem; background: var(--verde); color: var(--blanco);
+      border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif;
+      font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; cursor: none;
+      transition: var(--trans); display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
     .btn-select:hover { background: var(--verde-medio); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,58,42,0.25); }
     .prop-card.selected .btn-select { background: var(--oro); color: var(--verde); }
-
-    /* ── PRECIO ANIMADO ─────────────────────────────────────────────── */
-    .price-tag .price-val { display: inline; }
+    .prop-card.selected .btn-select::before { content: '✓ '; }
 
     /* ── BRILLO al hover sobre tarjeta ─────────────────────────────── */
     .card-shine {
@@ -149,24 +158,68 @@
     .cards-row2 { display: flex; justify-content: center; gap: 2rem; max-width: 1200px; margin: 2rem auto 0; }
     .cards-row2 .card-wrap { flex: 0 0 calc(33.333% - 1.333rem); max-width: 370px; }
 
+    /* ── SECCIÓN ALQUILERES ──────────────────────────────────────────── */
+    #alquileres {
+      background: var(--crema); position: relative; overflow: hidden;
+      border-top: 1px solid rgba(26,58,42,0.08);
+    }
+    #alquileres .props-header { margin-bottom: 3rem; }
+    /* Alquileres en grid de 3 */
+    #alquileresGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+    #alquileresRow2 { display: flex; justify-content: center; gap: 2rem; max-width: 1200px; margin: 2rem auto 0; }
+    #alquileresRow2 .card-wrap { flex: 0 0 calc(33.333% - 1.333rem); max-width: 370px; }
+
+    /* Badge de tipo alquiler */
+    .tipo-badge {
+      position: absolute; top: 14px; right: 14px; background: rgba(26,58,42,0.85);
+      color: var(--oro-claro); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.7rem;
+      border-radius: 50px; backdrop-filter: blur(4px);
+    }
+
+    /* ── SELECCIÓN MÚLTIPLE: barra de seleccionados ──────────────────── */
+    #seleccionBar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 9000;
+      background: var(--verde); border-top: 2px solid var(--oro);
+      padding: 0.9rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 -8px 30px rgba(26,58,42,0.35);
+    }
+    #seleccionBar.visible { transform: translateY(0); }
+    #seleccionBar .bar-left { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    #seleccionBar .bar-count {
+      background: var(--oro); color: var(--verde); font-weight: 700;
+      font-size: 0.8rem; padding: 0.3rem 0.9rem; border-radius: 50px; white-space: nowrap;
+    }
+    #seleccionBar .bar-ids { color: rgba(255,255,255,0.8); font-size: 0.82rem; }
+    #seleccionBar .bar-cta {
+      background: var(--oro); color: var(--verde); border: none; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.88rem;
+      padding: 0.75rem 2rem; cursor: none; transition: var(--trans); white-space: nowrap;
+    }
+    #seleccionBar .bar-cta:hover { background: var(--oro-claro); transform: translateY(-2px); }
+
     /* ── FORMULARIO ─────────────────────────────────────────────────── */
     #reserva { background: linear-gradient(160deg, var(--verde) 0%, #0e2419 100%); position: relative; overflow: hidden; }
     #reserva::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(82,183,136,0.1) 0%, transparent 65%); pointer-events: none; }
-    .form-container { max-width: 860px; margin: 0 auto; position: relative; z-index: 2; }
+    .form-container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; }
+    .form-layout { display: grid; grid-template-columns: 1fr 340px; gap: 3rem; align-items: start; }
     .form-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 3rem 3.5rem; backdrop-filter: blur(12px); }
     .form-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; color: var(--blanco); margin-bottom: 0.4rem; }
     .form-subtitle { color: rgba(255,255,255,0.55); font-size: 0.92rem; margin-bottom: 2.5rem; }
     .selected-summary { background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.35); border-radius: 12px; padding: 1rem 1.4rem; margin-bottom: 2rem; color: var(--oro-claro); font-size: 0.9rem; display: none; }
-    .selected-summary.show { display: flex; align-items: center; gap: 0.7rem; }
+    .selected-summary.show { display: block; }
     .selected-summary strong { color: var(--oro); }
+    .solicitud-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .solicitud-chip { background: rgba(201,168,76,0.2); border: 1px solid rgba(201,168,76,0.5); color: var(--oro-claro); font-size: 0.78rem; font-weight: 700; padding: 0.2rem 0.7rem; border-radius: 6px; letter-spacing: 0.05em; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
     .form-grid .full { grid-column: 1 / -1; }
     label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 0.5rem; }
-    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea, select { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; padding: 0.85rem 1.1rem; transition: var(--trans); outline: none; -webkit-appearance: none; cursor: none; }
-    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+    input[type="text"], input[type="email"], input[type="tel"], textarea { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; padding: 0.85rem 1.1rem; transition: var(--trans); outline: none; -webkit-appearance: none; cursor: none; }
     input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
-    input:focus, select:focus, textarea:focus { border-color: var(--oro); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 3px rgba(201,168,76,0.15); }
-    select option { background: var(--verde); color: white; }
+    input:focus, textarea:focus { border-color: var(--oro); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 3px rgba(201,168,76,0.15); }
     .upload-area { border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 1.8rem; text-align: center; cursor: none; transition: var(--trans); position: relative; }
     .upload-area:hover, .upload-area.drag-over { border-color: var(--oro); background: rgba(201,168,76,0.06); }
     .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: none; width: 100%; height: 100%; padding: 0; background: none; border: none; }
@@ -175,12 +228,39 @@
     .upload-text { color: rgba(255,255,255,0.6); font-size: 0.88rem; }
     .upload-text strong { color: var(--oro-claro); }
     .upload-preview { color: var(--verde-claro); font-size: 0.82rem; margin-top: 0.5rem; font-weight: 600; }
+    .upload-note { color: rgba(255,255,255,0.4); font-size: 0.74rem; margin-top: 0.4rem; font-style: italic; }
     .upload-status { font-size: 0.8rem; margin-top: 0.5rem; color: var(--oro-claro); display: none; }
     .btn-submit { width: 100%; padding: 1.1rem 2rem; background: linear-gradient(135deg, var(--oro) 0%, #b8922e 100%); color: var(--verde); border: none; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: none; transition: var(--trans); position: relative; overflow: hidden; margin-top: 0.5rem; }
     .btn-submit:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 35px rgba(201,168,76,0.45); }
     .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; }
     .btn-submit .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(26,58,42,0.3); border-top-color: var(--verde); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── PANEL QR ────────────────────────────────────────────────────── */
+    .qr-panel {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px; padding: 2.2rem 2rem; backdrop-filter: blur(12px);
+      text-align: center; position: sticky; top: 2rem;
+    }
+    .qr-panel h3 {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600;
+      color: var(--blanco); margin-bottom: 0.3rem;
+    }
+    .qr-panel .qr-sub { color: rgba(255,255,255,0.5); font-size: 0.82rem; margin-bottom: 1.5rem; }
+    .qr-code-wrap {
+      background: var(--blanco); border-radius: 16px; padding: 1.2rem;
+      display: inline-block; margin-bottom: 1.4rem; box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    .qr-code-wrap svg { width: 160px; height: 160px; display: block; }
+    .qr-info-box {
+      background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 12px; padding: 1rem 1.2rem; text-align: left;
+    }
+    .qr-info-row { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; font-size: 0.85rem; }
+    .qr-info-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .qr-info-label { color: rgba(255,255,255,0.55); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .qr-info-val { color: var(--oro-claro); font-weight: 700; }
+    .qr-note { color: rgba(255,255,255,0.35); font-size: 0.72rem; margin-top: 1rem; line-height: 1.6; }
 
     /* ── MODAL ──────────────────────────────────────────────────────── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(10,25,17,0.75); backdrop-filter: blur(6px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.35s ease; }
@@ -190,16 +270,12 @@
     .modal-icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
     .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: var(--verde); margin-bottom: 0.6rem; }
     .modal-body-text { color: #666; font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.8rem; }
-    .modal-code { display: inline-block; background: var(--crema); border: 2px solid var(--verde-claro); color: var(--verde); font-weight: 700; font-size: 1.1rem; padding: 0.5rem 1.5rem; border-radius: 10px; letter-spacing: 0.1em; margin-bottom: 1.5rem; }
     .modal-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
     .btn-modal { padding: 0.8rem 1.8rem; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: none; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; transition: var(--trans); }
     .btn-modal-primary { background: var(--verde); color: white; }
     .btn-modal-primary:hover { background: var(--verde-medio); }
-    .btn-modal-wa { background: #25d366; color: white; }
-    .btn-modal-wa:hover { background: #1ebe5a; }
     .btn-modal-outline { background: transparent; color: var(--gris-texto); border: 1px solid #ddd; }
     .btn-modal-outline:hover { background: #f5f5f5; }
-    .modal-box.danger .modal-title { color: #c0392b; }
     .modal-loading { display: flex; flex-direction: column; align-items: center; gap: 1rem; color: var(--verde); }
     .loading-ring { width: 54px; height: 54px; border: 4px solid rgba(26,58,42,0.15); border-top-color: var(--verde-claro); border-radius: 50%; animation: spin 0.9s linear infinite; }
     .loading-text { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--verde); }
@@ -211,7 +287,6 @@
 
     @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
 
-    /* ── PULSE en badge ─────────────────────────────────────────────── */
     @keyframes pulse-glow {
       0%, 100% { box-shadow: 0 0 0 0 rgba(82,183,136,0.4); }
       50%       { box-shadow: 0 0 0 6px rgba(82,183,136,0); }
@@ -225,26 +300,43 @@
       transform: translate(-50%,-50%); transition: opacity 0.6s ease;
     }
 
+    /* ── LOADING SKELETON ────────────────────────────────────────────── */
+    .skeleton-card {
+      background: #e8e8e0; border-radius: var(--radius); height: 380px;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-color: #e8e8e0; }
+      50%  { background-color: #f0f0ea; }
+      100% { background-color: #e8e8e0; }
+    }
+
+    @media (max-width: 1050px) {
+      .form-layout { grid-template-columns: 1fr; }
+      .qr-panel { position: static; }
+    }
     @media (max-width: 900px) {
-      .cards-grid { grid-template-columns: repeat(2, 1fr); }
-      .cards-row2 { flex-wrap: wrap; }
-      .cards-row2 .card-wrap { flex: 0 0 calc(50% - 1rem); }
+      .cards-grid, #alquileresGrid { grid-template-columns: repeat(2, 1fr); }
+      .cards-row2, #alquileresRow2 { flex-wrap: wrap; }
+      .cards-row2 .card-wrap, #alquileresRow2 .card-wrap { flex: 0 0 calc(50% - 1rem); }
     }
     @media (max-width: 640px) {
-      .cards-grid { grid-template-columns: 1fr; }
-      .cards-row2 { flex-direction: column; }
-      .cards-row2 .card-wrap { flex: 1 1 auto; max-width: 100%; }
+      .cards-grid, #alquileresGrid { grid-template-columns: 1fr; }
+      .cards-row2, #alquileresRow2 { flex-direction: column; }
+      .cards-row2 .card-wrap, #alquileresRow2 .card-wrap { flex: 1 1 auto; max-width: 100%; }
       .form-card { padding: 2rem 1.4rem; }
       .form-grid { grid-template-columns: 1fr; }
       .form-grid .full { grid-column: 1; }
       body { cursor: auto; }
       #cursor-dot, #cursor-ring { display: none; }
+      #seleccionBar { padding: 0.75rem 1rem; flex-direction: column; align-items: stretch; }
+      #seleccionBar .bar-cta { text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <!-- CURSORES PERSONALIZADOS -->
+  <!-- CURSORES -->
   <div id="cursor-dot"></div>
   <div id="cursor-ring"></div>
 
@@ -253,32 +345,30 @@
     <div class="hero-content">
       <div class="hero-badge">🏠 Casas Chavez · Bolivia</div>
       <h1>Encuentra tu<br><em>hogar ideal</em></h1>
-      <p class="hero-sub">Propiedades seleccionadas en La Paz y Santa Cruz.<br>Reserva online en minutos con confirmación inmediata.</p>
+      <p class="hero-sub">Terrenos y alquileres en La Paz y Santa Cruz.<br>Solicita tu reserva en minutos con confirmación inmediata.</p>
       <a href="#propiedades" class="hero-cta">Ver Propiedades</a>
     </div>
   </section>
 
-  <!-- PROPIEDADES -->
+  <!-- ══════════ TERRENOS ══════════ -->
   <section id="propiedades">
     <canvas id="particles-canvas"></canvas>
 
     <div class="props-header">
-      <span class="section-label">Portafolio de viviendas</span>
-      <h2 class="section-title">Selecciona tu propiedad YA</h2>
-      <p class="section-desc">Haz clic en la propiedad que te interese para seleccionarla y proceder con tu reserva de visita.</p>
+      <span class="section-label">Terrenos en venta</span>
+      <h2 class="section-title">Selecciona tu propiedad</h2>
+      <p class="section-desc">Puedes seleccionar múltiples propiedades y terrenos. Enviaremos tu solicitud para revisión.</p>
     </div>
 
     <div class="cards-scene">
       <div class="cards-grid" id="cardsGrid">
-
-        <!-- TARJETA 1 -->
+        <!-- Tarjeta 1 -->
         <div class="card-wrap">
-          <div class="prop-card" data-id="101" data-nombre="Casa con Amplio Terreno" data-precio="140.000 Bs" data-reserva="700 Bs" data-precio-num="140000">
+          <div class="prop-card" data-id="101" data-nombre="Casa con Amplio Terreno" data-tipo="terreno">
             <div class="ribbon">✓ Elegida</div>
             <div class="card-shine"></div>
             <div class="card-img-wrap">
               <img src="https://res.cloudinary.com/dpfoul2dc/image/upload/v1779481480/terreno1_wwfk37.jpg" alt="Casa Alpacoma" loading="lazy" />
-              <div class="price-tag"><span class="price-val">140.000</span> Bs</div>
               <span class="estado-badge estado-disponible">Disponible</span>
             </div>
             <div class="card-body-prop">
@@ -291,7 +381,6 @@
                 <span class="cbadge">250 m² Superficie</span>
                 <span class="cbadge">3 Parqueos</span>
                 <span class="cbadge">Const. 38 m²</span>
-                <span class="cbadge">Reserva: 700 Bs</span>
               </div>
               <ul class="card-features">
                 <li>1 Habitación, cocina y ½ baño privado.</li>
@@ -299,19 +388,18 @@
                 <li>Muros de contención construidos.</li>
                 <li>Amplio espacio para seguir construyendo.</li>
               </ul>
-              <button class="btn-select" onclick="seleccionarPropiedad(this)">Seleccionar Propiedad</button>
+              <button class="btn-select" onclick="togglePropiedad(this)">Seleccionar Propiedad</button>
             </div>
           </div>
         </div>
 
-        <!-- TARJETA 2 -->
+        <!-- Tarjeta 2 -->
         <div class="card-wrap">
-          <div class="prop-card" data-id="102" data-nombre="Residencia de 3 Plantas" data-precio="350.000 Bs" data-reserva="1.500 Bs" data-precio-num="350000">
+          <div class="prop-card" data-id="102" data-nombre="Residencia de 3 Plantas" data-tipo="terreno">
             <div class="ribbon">✓ Elegida</div>
             <div class="card-shine"></div>
             <div class="card-img-wrap">
               <img src="https://res.cloudinary.com/dpfoul2dc/image/upload/v1779481480/terreno2_kbujhy.jpg" alt="Casa San Miguel" loading="lazy" />
-              <div class="price-tag"><span class="price-val">350.000</span> Bs</div>
               <span class="estado-badge estado-disponible">Disponible</span>
             </div>
             <div class="card-body-prop">
@@ -324,28 +412,25 @@
                 <span class="cbadge">4 Dormitorios</span>
                 <span class="cbadge">5 Baños</span>
                 <span class="cbadge">2 Parqueos</span>
-                <span class="cbadge">Reserva: 1.500 Bs</span>
               </div>
               <ul class="card-features">
                 <li>Living amplio con chimenea y bar al aire libre.</li>
                 <li>Cocina espaciosa con despensa independiente.</li>
                 <li>Jardín trasero con churrasquera.</li>
                 <li>Se acepta financiamiento bancario.</li>
-                <li>Agenda tu visita con 24 hrs. de anticipación.</li>
               </ul>
-              <button class="btn-select" onclick="seleccionarPropiedad(this)">Seleccionar Propiedad</button>
+              <button class="btn-select" onclick="togglePropiedad(this)">Seleccionar Propiedad</button>
             </div>
           </div>
         </div>
 
-        <!-- TARJETA 3 -->
+        <!-- Tarjeta 3 -->
         <div class="card-wrap">
-          <div class="prop-card" data-id="103" data-nombre="Casa a Estreno - Cotoca" data-precio="100.000 Bs" data-reserva="1.000 Bs" data-precio-num="100000">
+          <div class="prop-card" data-id="103" data-nombre="Casa a Estreno - Cotoca" data-tipo="terreno">
             <div class="ribbon">✓ Elegida</div>
             <div class="card-shine"></div>
             <div class="card-img-wrap">
               <img src="https://res.cloudinary.com/dpfoul2dc/image/upload/v1779481480/terreno3_vmzarq.jpg" alt="Casa Cotoca" loading="lazy" />
-              <div class="price-tag"><span class="price-val">100.000</span> Bs</div>
               <span class="estado-badge estado-disponible">Disponible</span>
             </div>
             <div class="card-body-prop">
@@ -358,31 +443,27 @@
                 <span class="cbadge">250 m² Superficie</span>
                 <span class="cbadge">Const. 115 m²</span>
                 <span class="cbadge">3 Parqueos</span>
-                <span class="cbadge">Reserva: 1.000 Bs</span>
               </div>
               <ul class="card-features">
                 <li>1 Dormitorio en suite + 2 dormitorios c/baño compartido.</li>
                 <li>Living comedor, cocina amoblada y lavandería.</li>
                 <li>Cero cuota inicial. Contado o financiamiento bancario.</li>
               </ul>
-              <button class="btn-select" onclick="seleccionarPropiedad(this)">Seleccionar Propiedad</button>
+              <button class="btn-select" onclick="togglePropiedad(this)">Seleccionar Propiedad</button>
             </div>
           </div>
         </div>
-
       </div>
 
-      <!-- Fila 2 -->
+      <!-- Fila 2 terrenos -->
       <div class="cards-row2">
-
-        <!-- TARJETA 4 -->
+        <!-- Tarjeta 4 -->
         <div class="card-wrap">
-          <div class="prop-card" data-id="104" data-nombre="Casa en Alquiler - Rincón Colonial" data-precio="2.500 Bs/mes" data-reserva="2.500 Bs" data-precio-num="2500">
+          <div class="prop-card" data-id="104" data-nombre="Casa en Alquiler - Rincón Colonial" data-tipo="terreno">
             <div class="ribbon">✓ Elegida</div>
             <div class="card-shine"></div>
             <div class="card-img-wrap">
               <img src="https://res.cloudinary.com/dpfoul2dc/image/upload/v1779481480/terreno4_cxwzvm.jpg" alt="Rincón Colonial" loading="lazy" />
-              <div class="price-tag"><span class="price-val">2.500</span> Bs / mes</div>
               <span class="estado-badge estado-disponible">Disponible</span>
             </div>
             <div class="card-body-prop">
@@ -394,27 +475,24 @@
               <div class="card-badges">
                 <span class="cbadge">220 m²</span>
                 <span class="cbadge">Seguridad 24/7</span>
-                <span class="cbadge">Garantía: 2.500 Bs</span>
               </div>
               <ul class="card-features">
                 <li>3 Habitaciones (1 en suite) + habitación de servicio, 2 baños.</li>
                 <li>Puertas Blindex con salida a galería y jardín interior.</li>
                 <li>Piscina, churrasquera y parque infantil en áreas comunes.</li>
-                <li>Acceso directo Línea de micro 98. Expensas incluidas.</li>
               </ul>
-              <button class="btn-select" onclick="seleccionarPropiedad(this)">Seleccionar Propiedad</button>
+              <button class="btn-select" onclick="togglePropiedad(this)">Seleccionar Propiedad</button>
             </div>
           </div>
         </div>
 
-        <!-- TARJETA 5 -->
+        <!-- Tarjeta 5 -->
         <div class="card-wrap">
-          <div class="prop-card" data-id="105" data-nombre="Casa en Venta - Condominio San Telmo" data-precio="15.000 Bs" data-reserva="5.000 Bs" data-precio-num="15000">
+          <div class="prop-card" data-id="105" data-nombre="Casa en Venta - Condominio San Telmo" data-tipo="terreno">
             <div class="ribbon">✓ Elegida</div>
             <div class="card-shine"></div>
             <div class="card-img-wrap">
               <img src="https://res.cloudinary.com/dpfoul2dc/image/upload/v1779481480/terreno5_nd18oy.jpg" alt="San Telmo" loading="lazy" />
-              <div class="price-tag"><span class="price-val">15.000</span> Bs</div>
               <span class="estado-badge estado-disponible">Disponible</span>
             </div>
             <div class="card-body-prop">
@@ -426,113 +504,189 @@
               <div class="card-badges">
                 <span class="cbadge">Terreno: 360 m²</span>
                 <span class="cbadge">Const: 83 m²</span>
-                <span class="cbadge">TC: 6.97 Bs/$</span>
-                <span class="cbadge">Reserva: 5.000 Bs</span>
               </div>
               <ul class="card-features">
                 <li>2 Dormitorios (1 en suite), sala comedor y cocina.</li>
                 <li>2 Baños en total, lavandería independiente.</li>
                 <li>Amplio patio con churrasquera integrada.</li>
-                <li>Tipo de cambio fijo: 6.97 Bs por dólar.</li>
               </ul>
-              <button class="btn-select" onclick="seleccionarPropiedad(this)">Seleccionar Propiedad</button>
+              <button class="btn-select" onclick="togglePropiedad(this)">Seleccionar Propiedad</button>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- FORMULARIO DE RESERVA -->
+  <!-- ══════════ ALQUILERES ══════════ -->
+  <section id="alquileres">
+    <div class="props-header" style="max-width:1200px;margin:0 auto 3rem;">
+      <span class="section-label">Propiedades en alquiler</span>
+      <h2 class="section-title">Alquileres disponibles</h2>
+      <p class="section-desc">También puedes solicitar uno o varios alquileres junto con terrenos en una sola solicitud.</p>
+    </div>
+
+    <!-- Las tarjetas de alquileres se generan dinámicamente desde Google Sheets -->
+    <div id="alquileresGrid">
+      <!-- Skeletons mientras carga -->
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+    <div id="alquileresRow2" style="display:none;"></div>
+  </section>
+
+  <!-- ══════════ FORMULARIO DE SOLICITUD ══════════ -->
   <section id="reserva">
     <div class="form-container">
       <span class="section-label" style="color:var(--verde-claro)">Paso Final</span>
-      <h2 class="form-title">Completa tu Reserva</h2>
-      <p class="form-subtitle">Tus datos están protegidos. Recibirás confirmación por correo electrónico.</p>
+      <h2 class="form-title">Completa tu Solicitud</h2>
+      <p class="form-subtitle">Tu solicitud será revisada manualmente. Te contactaremos para confirmar la reserva.</p>
 
-      <div class="selected-summary" id="selectedSummary">
-        <span>🏠</span>
-        <span>Propiedad seleccionada: <strong id="summaryName">—</strong> · Monto de reserva: <strong id="summaryReserva">—</strong></span>
-      </div>
+      <div class="form-layout">
+        <!-- FORMULARIO -->
+        <div>
+          <div class="selected-summary" id="selectedSummary">
+            <div style="margin-bottom:0.5rem;">🏠 <strong>Propiedades seleccionadas:</strong></div>
+            <div class="solicitud-chips" id="solicitudChips"></div>
+          </div>
 
-      <div class="form-card">
-        <form id="formReserva"
-              action="https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec"
-              method="POST"
-              enctype="multipart/form-data"
-              novalidate>
+          <div class="form-card">
+            <form id="formReserva"
+                  action="https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  novalidate>
 
-          <input type="hidden" name="accion"        value="nueva_reserva" />
-          <input type="hidden" name="idTerreno"     id="idTerrenoSeleccionado" />
-          <input type="hidden" name="url_documento" id="url_documento" value="Sin documento" />
+              <!-- Campos ocultos -->
+              <input type="hidden" name="accion"        value="nueva_solicitud" />
+              <input type="hidden" name="solicitud"     id="inputSolicitud" />
+              <input type="hidden" name="url_pago"      id="url_pago" value="Sin comprobante" />
 
-          <div class="form-grid">
-            <div>
-              <label for="nombre">Nombre</label>
-              <input type="text" id="nombre" name="nombre" placeholder="Carlos" required minlength="2" />
-            </div>
-            <div>
-              <label for="apellido">Apellido</label>
-              <input type="text" id="apellido" name="apellido" placeholder="Machaca" required minlength="2" />
-            </div>
-            <div>
-              <label for="correo">Correo Electrónico</label>
-              <input type="email" id="correo" name="correo" placeholder="correo@email.com" required />
-            </div>
-            <div>
-              <label for="telefono">Teléfono / WhatsApp</label>
-              <input type="tel" id="telefono" name="telefono" placeholder="71234567" required />
-            </div>
-            <div>
-              <label for="fecha">Fecha de Visita</label>
-              <input type="date" id="fecha" name="fecha" required />
-            </div>
-            <div>
-              <label for="hora">Hora de Inicio</label>
-              <select id="hora" name="hora" required>
-                <option value="">Selecciona una hora…</option>
-                <option value="09:00">09:00 AM</option>
-                <option value="10:00">10:00 AM</option>
-                <option value="11:00">11:00 AM</option>
-                <option value="14:00">02:00 PM</option>
-                <option value="15:00">03:00 PM</option>
-                <option value="16:00">04:00 PM</option>
-              </select>
-            </div>
-            <div class="full">
-              <label for="observacion">Observaciones (opcional)</label>
-              <textarea id="observacion" name="observacion" rows="3" placeholder="¿Alguna pregunta o comentario antes de tu visita?"></textarea>
-            </div>
-            <div class="full">
-              <label>Documento de Identidad (CI, PDF o Imagen)</label>
-              <div class="upload-area" id="uploadArea">
-                <input type="file" id="fileDocumento" accept="image/*,application/pdf" required />
-                <div class="upload-icon">📎</div>
-                <div class="upload-text"><strong>Haz clic o arrastra</strong> tu documento aquí</div>
-                <div class="upload-text">PNG, JPG o PDF · Máx. 5MB</div>
+              <div class="form-grid">
+                <div>
+                  <label for="nombre">Nombre</label>
+                  <input type="text" id="nombre" name="nombre" placeholder="Carlos" required minlength="2" />
+                </div>
+                <div>
+                  <label for="apellido">Apellido</label>
+                  <input type="text" id="apellido" name="apellido" placeholder="Machaca" required minlength="2" />
+                </div>
+                <div>
+                  <label for="correo">Correo Electrónico</label>
+                  <input type="email" id="correo" name="correo" placeholder="correo@email.com" required />
+                </div>
+                <div>
+                  <label for="telefono">Teléfono / WhatsApp</label>
+                  <input type="tel" id="telefono" name="telefono" placeholder="71234567" required />
+                </div>
+                <div class="full">
+                  <label>Comprobante de Pago (Imagen)</label>
+                  <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileComprobante" accept="image/*,application/pdf" required />
+                    <div class="upload-icon">📎</div>
+                    <div class="upload-text"><strong>Haz clic o arrastra</strong> tu comprobante aquí</div>
+                    <div class="upload-text">PNG, JPG o PDF · Máx. 5MB</div>
+                  </div>
+                  <div class="upload-preview" id="uploadPreview"></div>
+                  <div class="upload-note">1 Bs por solicitud de reserva</div>
+                  <div class="upload-status" id="uploadStatus"></div>
+                </div>
               </div>
-              <div class="upload-preview" id="uploadPreview"></div>
-              <div class="upload-status" id="uploadStatus"></div>
+
+              <div style="margin-top:1.8rem;">
+                <button type="button" class="btn-submit" id="btnSubmit" onclick="validarYEnviar()">
+                  <span id="btnText">Enviar Solicitud &rarr;</span>
+                  <span id="btnLoading" style="display:none;"><span class="spinner"></span> Procesando…</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- PANEL QR -->
+        <div class="qr-panel">
+          <h3>Pago de Solicitud</h3>
+          <p class="qr-sub">Escanea el QR y realiza el pago de 1 Bs para procesar tu solicitud</p>
+          <div class="qr-code-wrap">
+            <!-- QR simulado SVG -->
+            <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" style="width:160px;height:160px;display:block;">
+              <!-- Marco exterior -->
+              <rect width="160" height="160" fill="white"/>
+              <!-- Finder pattern TL -->
+              <rect x="10" y="10" width="45" height="45" fill="#1a3a2a" rx="3"/>
+              <rect x="16" y="16" width="33" height="33" fill="white" rx="1"/>
+              <rect x="22" y="22" width="21" height="21" fill="#1a3a2a" rx="1"/>
+              <!-- Finder pattern TR -->
+              <rect x="105" y="10" width="45" height="45" fill="#1a3a2a" rx="3"/>
+              <rect x="111" y="16" width="33" height="33" fill="white" rx="1"/>
+              <rect x="117" y="22" width="21" height="21" fill="#1a3a2a" rx="1"/>
+              <!-- Finder pattern BL -->
+              <rect x="10" y="105" width="45" height="45" fill="#1a3a2a" rx="3"/>
+              <rect x="16" y="111" width="33" height="33" fill="white" rx="1"/>
+              <rect x="22" y="117" width="21" height="21" fill="#1a3a2a" rx="1"/>
+              <!-- Módulos de datos simulados (patrón decorativo) -->
+              <g fill="#1a3a2a">
+                <rect x="62" y="10" width="6" height="6"/><rect x="72" y="10" width="6" height="6"/><rect x="82" y="10" width="6" height="6"/>
+                <rect x="62" y="20" width="6" height="6"/><rect x="82" y="20" width="6" height="6"/>
+                <rect x="72" y="30" width="6" height="6"/>
+                <rect x="62" y="40" width="6" height="6"/><rect x="72" y="40" width="6" height="6"/>
+                <rect x="10" y="62" width="6" height="6"/><rect x="20" y="62" width="6" height="6"/>
+                <rect x="30" y="72" width="6" height="6"/>
+                <rect x="10" y="82" width="6" height="6"/><rect x="30" y="82" width="6" height="6"/>
+                <rect x="62" y="62" width="6" height="6"/><rect x="72" y="62" width="6" height="6"/><rect x="82" y="62" width="6" height="6"/><rect x="92" y="62" width="6" height="6"/>
+                <rect x="62" y="72" width="6" height="6"/><rect x="82" y="72" width="6" height="6"/>
+                <rect x="72" y="82" width="6" height="6"/><rect x="92" y="82" width="6" height="6"/>
+                <rect x="62" y="92" width="6" height="6"/><rect x="72" y="92" width="6" height="6"/><rect x="82" y="92" width="6" height="6"/>
+                <rect x="105" y="62" width="6" height="6"/><rect x="115" y="62" width="6" height="6"/><rect x="135" y="62" width="6" height="6"/>
+                <rect x="105" y="72" width="6" height="6"/><rect x="125" y="72" width="6" height="6"/>
+                <rect x="115" y="82" width="6" height="6"/><rect x="135" y="82" width="6" height="6"/>
+                <rect x="105" y="92" width="6" height="6"/><rect x="115" y="92" width="6" height="6"/><rect x="135" y="92" width="6" height="6"/>
+                <rect x="62" y="105" width="6" height="6"/><rect x="82" y="105" width="6" height="6"/>
+                <rect x="72" y="115" width="6" height="6"/><rect x="92" y="115" width="6" height="6"/>
+                <rect x="62" y="125" width="6" height="6"/><rect x="72" y="125" width="6" height="6"/>
+                <rect x="82" y="135" width="6" height="6"/><rect x="92" y="135" width="6" height="6"/>
+                <rect x="105" y="105" width="6" height="6"/><rect x="125" y="105" width="6" height="6"/>
+                <rect x="115" y="115" width="6" height="6"/>
+                <rect x="105" y="125" width="6" height="6"/><rect x="135" y="125" width="6" height="6"/>
+                <rect x="115" y="135" width="6" height="6"/><rect x="125" y="135" width="6" height="6"/>
+              </g>
+            </svg>
+          </div>
+          <div class="qr-info-box">
+            <div class="qr-info-row">
+              <span class="qr-info-label">Cuenta</span>
+              <span class="qr-info-val">123455</span>
+            </div>
+            <div class="qr-info-row">
+              <span class="qr-info-label">Usuario</span>
+              <span class="qr-info-val">JuanPari</span>
+            </div>
+            <div class="qr-info-row">
+              <span class="qr-info-label">Monto</span>
+              <span class="qr-info-val">1 Bs</span>
             </div>
           </div>
-
-          <div style="margin-top:1.8rem;">
-            <button type="button" class="btn-submit" id="btnSubmit" onclick="validarYEnviar()">
-              <span id="btnText">Confirmar Reserva &rarr;</span>
-              <span id="btnLoading" style="display:none;"><span class="spinner"></span> Procesando…</span>
-            </button>
-          </div>
-        </form>
+          <p class="qr-note">Sube la captura de tu comprobante en el formulario. Tu solicitud será revisada manualmente.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <strong>BienesCasas Bolivia</strong> &nbsp;·&nbsp; Sistema de Reservas Casas Chavez<br>
+    <strong>BienesCasas Bolivia</strong> &nbsp;·&nbsp; Sistema de Solicitudes Casas Chavez<br>
     <span style="color:rgba(255,255,255,0.3); font-size:0.75rem;">Derechos reservados &copy; 2026</span>
   </footer>
+
+  <!-- BARRA DE SELECCIÓN MÚLTIPLE -->
+  <div id="seleccionBar">
+    <div class="bar-left">
+      <span class="bar-count" id="barCount">0 seleccionadas</span>
+      <span class="bar-ids" id="barIds"></span>
+    </div>
+    <button class="bar-cta" onclick="irAFormulario()">Solicitar estas propiedades →</button>
+  </div>
 
   <!-- MODAL -->
   <div class="modal-overlay" id="modalOverlay">
@@ -547,13 +701,19 @@
     ══════════════════════════════════════════════════════════════ */
     const CLOUDINARY_CLOUD  = 'dpfoul2dc';
     const CLOUDINARY_PRESET = 'Unsigned';
-    const WHATSAPP_NUM      = '59171979648';
     const APPS_SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec';
 
-    document.getElementById('fecha').min = new Date().toISOString().split('T')[0];
+    // Imágenes para alquileres (fijas en el HTML, datos vienen de Sheets)
+    const ALQUILER_IMGS = {
+      'A1': 'https://res.cloudinary.com/dpfoul2dc/image/upload/v1779843772/alquiler1_zlygxf.jpg',
+      'A2': 'https://res.cloudinary.com/dpfoul2dc/image/upload/v1779843770/alquiler2_td9azr.jpg',
+      'A3': 'https://res.cloudinary.com/dpfoul2dc/image/upload/v1779843771/alquiler3_mqehi6.jpg',
+      'A4': 'https://res.cloudinary.com/dpfoul2dc/image/upload/v1779843771/alquiler4_dbd4mj.jpg',
+      'A5': 'https://res.cloudinary.com/dpfoul2dc/image/upload/v1779843771/alquiler5_lgikte.jpg',
+    };
 
     /* ══════════════════════════════════════════════════════════════
-       CURSOR PERSONALIZADO
+       CURSOR PERSONALIZADO (sin cambios)
     ══════════════════════════════════════════════════════════════ */
     const dot  = document.getElementById('cursor-dot');
     const ring = document.getElementById('cursor-ring');
@@ -565,7 +725,6 @@
       dot.style.top   = my + 'px';
     });
 
-    // Ring sigue con retraso suave
     function animRing() {
       rx += (mx - rx) * 0.12;
       ry += (my - ry) * 0.12;
@@ -575,17 +734,19 @@
     }
     animRing();
 
-    // Cursor cursor-card sobre tarjetas, cursor-cta sobre CTAs
-    document.querySelectorAll('.prop-card').forEach(c => {
-      c.addEventListener('mouseenter', () => document.body.classList.add('cursor-card'));
-      c.addEventListener('mouseleave', () => document.body.classList.remove('cursor-card'));
-    });
-    document.querySelectorAll('.hero-cta, .btn-submit, .btn-select, .btn-modal').forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-cta'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-cta'));
-    });
+    function bindCursorEvents() {
+      document.querySelectorAll('.prop-card').forEach(c => {
+        c.addEventListener('mouseenter', () => document.body.classList.add('cursor-card'));
+        c.addEventListener('mouseleave', () => document.body.classList.remove('cursor-card'));
+      });
+      document.querySelectorAll('.hero-cta, .btn-submit, .btn-select, .btn-modal, .bar-cta').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-cta'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-cta'));
+      });
+    }
+    bindCursorEvents();
 
-    /* ── TRAIL de partículas tras el cursor ─────────────────────── */
+    /* ── TRAIL ──────────────────────────────────────────────────── */
     const TRAIL_LEN = 10;
     const trails = [];
     for (let i = 0; i < TRAIL_LEN; i++) {
@@ -610,12 +771,12 @@
     animTrail();
 
     /* ══════════════════════════════════════════════════════════════
-       PARTÍCULAS EN SECCIÓN PROPIEDADES
+       PARTÍCULAS (sin cambios)
     ══════════════════════════════════════════════════════════════ */
     (function initParticles() {
       const canvas = document.getElementById('particles-canvas');
       const ctx    = canvas.getContext('2d');
-      let W, H, particles = [];
+      let W, H;
 
       function resize() {
         const sec = document.getElementById('propiedades');
@@ -626,14 +787,12 @@
       window.addEventListener('resize', resize);
 
       const COLORS = ['rgba(82,183,136,', 'rgba(201,168,76,', 'rgba(45,106,79,'];
-
+      const particles = [];
       for (let i = 0; i < 55; i++) {
         particles.push({
-          x: Math.random() * 1200,
-          y: Math.random() * 1200,
+          x: Math.random() * 1200, y: Math.random() * 1200,
           r: Math.random() * 3.5 + 0.8,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
+          vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
           color: COLORS[Math.floor(Math.random() * COLORS.length)],
           alpha: Math.random() * 0.35 + 0.08,
           pulse: Math.random() * Math.PI * 2
@@ -644,21 +803,17 @@
         ctx.clearRect(0, 0, W, H);
         const t = performance.now() * 0.001;
         particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
+          p.x += p.vx; p.y += p.vy;
           if (p.x < -10) p.x = W + 10;
           if (p.x > W + 10) p.x = -10;
           if (p.y < -10) p.y = H + 10;
           if (p.y > H + 10) p.y = -10;
-
           const pulse = Math.sin(t + p.pulse) * 0.3 + 0.7;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r * pulse, 0, Math.PI * 2);
           ctx.fillStyle = p.color + (p.alpha * pulse) + ')';
           ctx.fill();
         });
-
-        // Líneas entre partículas cercanas
         for (let i = 0; i < particles.length; i++) {
           for (let j = i + 1; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
@@ -674,161 +829,247 @@
             }
           }
         }
-
         requestAnimationFrame(draw);
       }
       draw();
     })();
 
     /* ══════════════════════════════════════════════════════════════
-       INTERSECTION OBSERVER + ANIMACIÓN DE PRECIO
+       INTERSECTION OBSERVER (sin cambios)
     ══════════════════════════════════════════════════════════════ */
-    function animatePrice(el, target) {
-      const duration = 1200;
-      const start = performance.now();
-      const isLarge = target >= 1000;
-
-      function step(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 3);
-        const val = Math.floor(ease * target);
-
-        if (isLarge) {
-          // Formato con punto de miles
-          el.textContent = val.toLocaleString('es-BO').replace(/,/g, '.');
-        } else {
-          el.textContent = val.toLocaleString('es-BO');
-        }
-
-        if (progress < 1) requestAnimationFrame(step);
-        else {
-          // Restaurar texto original formateado
-          if (isLarge) {
-            el.textContent = target.toLocaleString('es-BO').replace(/,/g, '.');
-          } else {
-            el.textContent = target.toLocaleString('es-BO');
-          }
-        }
-      }
-      requestAnimationFrame(step);
-    }
-
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          const card = e.target;
-          card.classList.add('visible');
-
-          // Animar precio
-          const priceEl  = card.querySelector('.price-val');
-          const targetNum = parseFloat(card.dataset.precioNum);
-          if (priceEl && targetNum) {
-            setTimeout(() => animatePrice(priceEl, targetNum), 300);
-          }
-
-          observer.unobserve(card);
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
         }
       });
     }, { threshold: 0.15 });
-    document.querySelectorAll('.prop-card').forEach(c => observer.observe(c));
+
+    function observeCards() {
+      document.querySelectorAll('.prop-card').forEach(c => observer.observe(c));
+    }
+    observeCards();
 
     /* ══════════════════════════════════════════════════════════════
-       TILT 3D + SOMBRA DINÁMICA + BRILLO
+       TILT 3D + BRILLO (sin cambios, se re-aplica dinámicamente)
     ══════════════════════════════════════════════════════════════ */
-    document.querySelectorAll('.prop-card').forEach(card => {
-      const shine = card.querySelector('.card-shine');
-
-      card.addEventListener('mousemove', e => {
-        const r   = card.getBoundingClientRect();
-        const dx  = (e.clientX - r.left  - r.width  / 2) / (r.width  / 2);
-        const dy  = (e.clientY - r.top   - r.height / 2) / (r.height / 2);
-
-        // Tilt suave
-        card.style.transform = `rotateY(${dx * 12}deg) rotateX(${-dy * 9}deg) translateZ(12px) scale(1.012)`;
-
-        // Sombra pronunciada según dirección
-        const shadowX = dx * 30;
-        const shadowY = dy * 20;
-        const intensity = Math.sqrt(dx*dx + dy*dy);
-        card.style.boxShadow = `
-          ${shadowX}px ${shadowY + 12}px ${40 + intensity * 40}px rgba(26,58,42,${0.15 + intensity * 0.18}),
-          0 2px 8px rgba(26,58,42,0.1)
-        `;
-
-        // Brillo especular
-        const px = ((e.clientX - r.left) / r.width  * 100).toFixed(1);
-        const py = ((e.clientY - r.top)  / r.height * 100).toFixed(1);
-        if (shine) {
-          shine.style.setProperty('--mx', px + '%');
-          shine.style.setProperty('--my', py + '%');
-        }
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform  = '';
-        card.style.boxShadow  = '';
-      });
-    });
-
-    /* ══════════════════════════════════════════════════════════════
-       SINCRONIZAR ESTADOS
-    ══════════════════════════════════════════════════════════════ */
-    async function sincronizarEstados() {
-      try {
-        const resp = await fetch(APPS_SCRIPT_URL);
-        const data = await resp.json();
-        if (data.status !== 'OK') return;
-        data.terrenos.forEach(t => {
-          const card = document.querySelector(`.prop-card[data-id="${t.id}"]`);
-          if (!card) return;
-          const badge  = card.querySelector('.estado-badge');
-          const btnSel = card.querySelector('.btn-select');
-          const reservado = t.estado !== 'Disponible';
-          badge.textContent = reservado ? t.estado : 'Disponible';
-          badge.className   = 'estado-badge ' + (reservado ? 'estado-reservado' : 'estado-disponible');
-          if (reservado) {
-            card.style.opacity = '0.6';
-            card.style.cursor  = 'default';
-            btnSel.disabled    = true;
-            btnSel.textContent = '✖ No disponible';
-            btnSel.style.background = '#888';
-            btnSel.style.cursor     = 'not-allowed';
-            btnSel.onclick = null;
+    function bindTilt() {
+      document.querySelectorAll('.prop-card').forEach(card => {
+        if (card._tiltBound) return;
+        card._tiltBound = true;
+        const shine = card.querySelector('.card-shine');
+        card.addEventListener('mousemove', e => {
+          const r  = card.getBoundingClientRect();
+          const dx = (e.clientX - r.left  - r.width  / 2) / (r.width  / 2);
+          const dy = (e.clientY - r.top   - r.height / 2) / (r.height / 2);
+          card.style.transform = `rotateY(${dx * 12}deg) rotateX(${-dy * 9}deg) translateZ(12px) scale(1.012)`;
+          const intensity = Math.sqrt(dx*dx + dy*dy);
+          card.style.boxShadow = `${dx*30}px ${dy*20+12}px ${40+intensity*40}px rgba(26,58,42,${0.15+intensity*0.18}), 0 2px 8px rgba(26,58,42,0.1)`;
+          if (shine) {
+            shine.style.setProperty('--mx', ((e.clientX - r.left) / r.width  * 100).toFixed(1) + '%');
+            shine.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100).toFixed(1) + '%');
           }
         });
-      } catch (err) {
-        console.warn('No se pudo sincronizar estados:', err);
-      }
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+          card.style.boxShadow = '';
+        });
+      });
     }
-    sincronizarEstados();
+    bindTilt();
 
     /* ══════════════════════════════════════════════════════════════
-       SELECCIÓN DE PROPIEDAD
+       SELECCIÓN MÚLTIPLE
     ══════════════════════════════════════════════════════════════ */
-    let propiedadSeleccionada = null;
+    const propiedadesSeleccionadas = new Map(); // id -> nombre
 
-    function seleccionarPropiedad(btn) {
+    function togglePropiedad(btn) {
       const card = btn.closest('.prop-card');
-      document.querySelectorAll('.prop-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      propiedadSeleccionada = {
-        id:      card.dataset.id,
-        nombre:  card.dataset.nombre,
-        precio:  card.dataset.precio,
-        reserva: card.dataset.reserva
-      };
-      document.getElementById('summaryName').textContent    = propiedadSeleccionada.nombre;
-      document.getElementById('summaryReserva').textContent = propiedadSeleccionada.reserva;
-      document.getElementById('selectedSummary').classList.add('show');
+      const id   = card.dataset.id;
+      const nombre = card.dataset.nombre;
+
+      if (propiedadesSeleccionadas.has(id)) {
+        propiedadesSeleccionadas.delete(id);
+        card.classList.remove('selected');
+        btn.textContent = 'Seleccionar Propiedad';
+      } else {
+        propiedadesSeleccionadas.set(id, nombre);
+        card.classList.add('selected');
+      }
+
+      actualizarBarraSeleccion();
+      actualizarResumenFormulario();
+    }
+
+    function actualizarBarraSeleccion() {
+      const bar   = document.getElementById('seleccionBar');
+      const count = propiedadesSeleccionadas.size;
+      document.getElementById('barCount').textContent = count + (count === 1 ? ' seleccionada' : ' seleccionadas');
+      document.getElementById('barIds').textContent   = [...propiedadesSeleccionadas.keys()].join(', ');
+      bar.classList.toggle('visible', count > 0);
+    }
+
+    function actualizarResumenFormulario() {
+      const summary = document.getElementById('selectedSummary');
+      const chips   = document.getElementById('solicitudChips');
+      const input   = document.getElementById('inputSolicitud');
+
+      if (propiedadesSeleccionadas.size === 0) {
+        summary.classList.remove('show');
+        input.value = '';
+        return;
+      }
+
+      const ids = [...propiedadesSeleccionadas.keys()];
+      input.value = ids.join(',');
+
+      chips.innerHTML = ids.map(id => {
+        const nombre = propiedadesSeleccionadas.get(id);
+        return `<span class="solicitud-chip">${id} — ${nombre}</span>`;
+      }).join('');
+
+      summary.classList.add('show');
+    }
+
+    function irAFormulario() {
+      actualizarResumenFormulario();
       setTimeout(() => {
         document.getElementById('reserva').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 200);
     }
 
     /* ══════════════════════════════════════════════════════════════
-       UPLOAD PREVIEW
+       CARGAR ALQUILERES DESDE GOOGLE SHEETS
     ══════════════════════════════════════════════════════════════ */
-    const fileInput     = document.getElementById('fileDocumento');
+    async function cargarAlquileres() {
+      try {
+        const resp = await fetch(APPS_SCRIPT_URL);
+        const data = await resp.json();
+        if (data.status !== 'OK') throw new Error('Sin datos');
+
+        const grid = document.getElementById('alquileresGrid');
+        const row2 = document.getElementById('alquileresRow2');
+        grid.innerHTML = '';
+        row2.innerHTML = '';
+
+        const alquileres = data.alquileres || [];
+        if (alquileres.length === 0) {
+          grid.innerHTML = '<p style="color:#6b7b6e;grid-column:1/-1;text-align:center;padding:2rem;">No hay alquileres disponibles en este momento.</p>';
+          return;
+        }
+
+        alquileres.forEach((a, idx) => {
+          const estadoClass = (a.estado || '').toLowerCase() === 'disponible' ? 'estado-disponible' : 'estado-reservado';
+          const imgUrl = ALQUILER_IMGS[a.id] || 'https://via.placeholder.com/400x210/1a3a2a/ffffff?text=Alquiler';
+          const disponible = (a.estado || '').toLowerCase() === 'disponible';
+
+          const cardHtml = `
+            <div class="card-wrap">
+              <div class="prop-card"
+                   data-id="${a.id}"
+                   data-nombre="${(a.descripcion || a.tipo || 'Alquiler').substring(0,40)}"
+                   data-tipo="alquiler"
+                   ${!disponible ? 'style="opacity:0.6;"' : ''}>
+                <div class="ribbon">✓ Elegida</div>
+                <div class="card-shine"></div>
+                <div class="card-img-wrap">
+                  <img src="${imgUrl}" alt="Alquiler ${a.id}" loading="lazy" />
+                  <span class="estado-badge ${estadoClass}">${a.estado || 'Disponible'}</span>
+                  <span class="tipo-badge">${a.tipo || 'Alquiler'}</span>
+                </div>
+                <div class="card-body-prop">
+                  <div class="card-location">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    ${a.direccion || '—'}
+                  </div>
+                  <h3 class="card-title-prop">${a.descripcion || 'Propiedad en Alquiler'}</h3>
+                  <div class="card-badges">
+                    <span class="cbadge">${a.tipo || 'Alquiler'}</span>
+                    <span class="cbadge">${a.estado || 'Disponible'}</span>
+                  </div>
+                  <ul class="card-features">
+                    <li>${a.descripcion || 'Consulta por detalles.'}</li>
+                    <li>Zona: ${a.direccion || '—'}</li>
+                  </ul>
+                  <button class="btn-select"
+                    onclick="${disponible ? 'togglePropiedad(this)' : ''}"
+                    ${!disponible ? 'disabled style="background:#888;cursor:not-allowed;"' : ''}>
+                    ${disponible ? 'Seleccionar Alquiler' : '✖ No disponible'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+
+          if (idx < 3) {
+            grid.insertAdjacentHTML('beforeend', cardHtml);
+          } else {
+            row2.insertAdjacentHTML('beforeend', cardHtml);
+          }
+        });
+
+        if (alquileres.length > 3) {
+          row2.style.display = 'flex';
+        }
+
+        // Rebind eventos y animaciones para nuevas tarjetas
+        bindTilt();
+        bindCursorEvents();
+        observeCards();
+
+      } catch (err) {
+        console.warn('No se pudieron cargar alquileres:', err);
+        const grid = document.getElementById('alquileresGrid');
+        grid.innerHTML = '<p style="color:#6b7b6e;grid-column:1/-1;text-align:center;padding:2rem;">No se pudieron cargar los alquileres. Intenta más tarde.</p>';
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       SINCRONIZAR ESTADOS TERRENOS (adaptado: NO cambia estado)
+    ══════════════════════════════════════════════════════════════ */
+    async function sincronizarEstados() {
+      try {
+        const resp = await fetch(APPS_SCRIPT_URL);
+        const data = await resp.json();
+        if (data.status !== 'OK') return;
+
+        // Sincronizar terrenos
+        (data.terrenos || []).forEach(t => {
+          const card = document.querySelector(`.prop-card[data-id="${t.id}"]`);
+          if (!card) return;
+          const badge  = card.querySelector('.estado-badge');
+          const btnSel = card.querySelector('.btn-select');
+          const reservado = (t.estado || '').toLowerCase() !== 'disponible';
+          if (badge) {
+            badge.textContent = t.estado || 'Disponible';
+            badge.className   = 'estado-badge ' + (reservado ? 'estado-reservado' : 'estado-disponible');
+          }
+          if (reservado) {
+            card.style.opacity = '0.6';
+            if (btnSel) {
+              btnSel.disabled    = true;
+              btnSel.textContent = '✖ No disponible';
+              btnSel.style.background = '#888';
+              btnSel.onclick = null;
+            }
+          }
+        });
+
+        // También cargar alquileres desde la respuesta
+        await cargarAlquileres();
+
+      } catch (err) {
+        console.warn('No se pudo sincronizar estados:', err);
+        await cargarAlquileres();
+      }
+    }
+    sincronizarEstados();
+
+    /* ══════════════════════════════════════════════════════════════
+       UPLOAD COMPROBANTE
+    ══════════════════════════════════════════════════════════════ */
+    const fileInput     = document.getElementById('fileComprobante');
     const uploadArea    = document.getElementById('uploadArea');
     const uploadPreview = document.getElementById('uploadPreview');
     const uploadStatus  = document.getElementById('uploadStatus');
@@ -862,7 +1103,7 @@
       const fd = new FormData();
       fd.append('file', file);
       fd.append('upload_preset', CLOUDINARY_PRESET);
-      fd.append('folder', 'documentos_reservas');
+      fd.append('folder', 'comprobantes_solicitudes');
       const resp = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/auto/upload`, { method: 'POST', body: fd });
       const data = await resp.json();
       if (data.secure_url) return data.secure_url;
@@ -905,21 +1146,24 @@
        VALIDAR Y ENVIAR
     ══════════════════════════════════════════════════════════════ */
     async function validarYEnviar() {
-      if (!propiedadSeleccionada) {
+      // Verificar que haya al menos una propiedad seleccionada
+      if (propiedadesSeleccionadas.size === 0) {
         abrirModal(`
           <span class="modal-icon">⚠️</span>
           <div class="modal-title">Selecciona una propiedad</div>
-          <p class="modal-body-text">Haz clic en <strong>"Seleccionar Propiedad"</strong> de la casa que te interesa antes de continuar.</p>
+          <p class="modal-body-text">Selecciona al menos una propiedad o alquiler antes de enviar tu solicitud.</p>
           <div class="modal-actions">
             <button class="btn-modal btn-modal-outline" onclick="cerrarModal(); document.getElementById('propiedades').scrollIntoView({behavior:'smooth'})">Ver propiedades</button>
           </div>
         `);
         return;
       }
-      document.getElementById('idTerrenoSeleccionado').value = propiedadSeleccionada.id;
 
-      const form   = document.getElementById('formReserva');
-      const campos = ['nombre','apellido','correo','telefono','fecha','hora'];
+      // Actualizar campo oculto con IDs seleccionados
+      document.getElementById('inputSolicitud').value = [...propiedadesSeleccionadas.keys()].join(',');
+
+      // Validar campos requeridos
+      const campos = ['nombre','apellido','correo','telefono'];
       let hayError = false;
       campos.forEach(id => {
         const el = document.getElementById(id);
@@ -935,8 +1179,8 @@
       if (!fileInput.files.length) {
         abrirModal(`
           <span class="modal-icon">📎</span>
-          <div class="modal-title">Adjunta tu documento</div>
-          <p class="modal-body-text">Necesitamos una foto o PDF de tu CI para procesar la reserva.</p>
+          <div class="modal-title">Adjunta tu comprobante</div>
+          <p class="modal-body-text">Necesitamos el comprobante del pago de 1 Bs para procesar tu solicitud.</p>
           <div class="modal-actions">
             <button class="btn-modal btn-modal-outline" onclick="cerrarModal()">Entendido</button>
           </div>
@@ -945,22 +1189,22 @@
       }
 
       setBtnLoading(true);
-      mostrarCargando('Subiendo documento de identidad…');
-      uploadStatus.textContent   = '⏳ Subiendo documento…';
+      mostrarCargando('Subiendo comprobante de pago…');
+      uploadStatus.textContent   = '⏳ Subiendo comprobante…';
       uploadStatus.style.display = 'block';
 
       try {
         const url = await subirACloudinary(fileInput.files[0]);
-        document.getElementById('url_documento').value = url;
-        uploadStatus.textContent = '✔ Documento subido correctamente';
+        document.getElementById('url_pago').value = url;
+        uploadStatus.textContent = '✔ Comprobante subido correctamente';
       } catch (err) {
-        uploadStatus.textContent = '⚠ No se pudo subir el documento, se enviará sin él.';
-        document.getElementById('url_documento').value = 'Sin documento';
+        uploadStatus.textContent = '⚠ No se pudo subir el comprobante, se enviará sin él.';
+        document.getElementById('url_pago').value = 'Sin comprobante';
         console.warn('Cloudinary error:', err);
       }
 
-      mostrarCargando('Registrando reserva en el sistema…');
-      form.submit();
+      mostrarCargando('Registrando solicitud en el sistema…');
+      document.getElementById('formReserva').submit();
     }
   </script>
 </body>
