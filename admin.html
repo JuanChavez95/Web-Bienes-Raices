@@ -12,6 +12,8 @@
       --verde-c: #52b788;
       --oro:     #c9984c;
       --oro-c:   #e8d5a3;
+      --rojo:    #dc2626;
+      --rojo-bg: #3f0e0e;
       --bg:      #0f0f0f;
       --bg2:     #181818;
       --bg3:     #222;
@@ -89,12 +91,19 @@
     input::placeholder, textarea::placeholder { color: var(--txt2); }
 
     /* Multi-select */
-    .ms-wrap { border: 1px solid var(--borde); border-radius: 7px; background: var(--bg3); max-height: 160px; overflow-y: auto; padding: .4rem; }
+    .ms-wrap { border: 1px solid var(--borde); border-radius: 7px; background: var(--bg3); max-height: 170px; overflow-y: auto; padding: .4rem; }
     .ms-opt { display: flex; align-items: center; gap: .5rem; padding: .3rem .4rem; border-radius: 5px; cursor: pointer; transition: background .15s; }
-    .ms-opt:hover { background: var(--bg2); }
+    .ms-opt:hover:not(.ms-reservado) { background: var(--bg2); }
     .ms-opt input[type="checkbox"] { accent-color: var(--oro); width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
     .ms-opt label { cursor: pointer; font-size: .83rem; color: var(--txt); flex: 1; }
     .ms-opt .ms-tipo { font-size: .68rem; color: var(--txt2); }
+
+    /* Opción reservada — visual bloqueada */
+    .ms-reservado { opacity: .55; cursor: not-allowed !important; background: var(--rojo-bg) !important; border-radius: 5px; }
+    .ms-reservado label { cursor: not-allowed !important; color: #f87171; }
+    .ms-reservado input[type="checkbox"] { cursor: not-allowed !important; }
+    .badge-res { display: inline-block; font-size: .62rem; font-weight: 700; background: var(--rojo); color: #fff;
+                 border-radius: 4px; padding: .1rem .4rem; letter-spacing: .04em; flex-shrink: 0; }
 
     /* Botones */
     .btn { display: inline-flex; align-items: center; gap: .4rem; border: none; border-radius: 8px; font-family: inherit; font-size: .83rem; font-weight: 600; padding: .6rem 1.1rem; cursor: pointer; transition: all .2s; text-decoration: none; }
@@ -129,6 +138,9 @@
     #lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
     #lb-close { position: absolute; top: 1rem; right: 1.2rem; font-size: 1.8rem; color: #fff; cursor: pointer; line-height: 1; }
 
+    /* Separador sección */
+    .seccion-sep { border: none; border-top: 1px solid var(--borde); margin: .6rem 0 1rem; }
+
     @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -149,7 +161,6 @@
   <!-- TABLA -->
   <div class="panel">
     <div class="panel-title">📋 Solicitudes</div>
-
     <div class="filtros">
       <select id="filtroBusq" onchange="filtrar()" style="max-width:160px;">
         <option value="">Todos</option>
@@ -160,19 +171,12 @@
         oninput="filtrar()" style="max-width:220px;" />
       <span id="contadorTotal" style="font-size:.78rem;color:var(--txt2);align-self:center;"></span>
     </div>
-
     <div class="tbl-wrap">
       <table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Teléfono</th>
-            <th>Solicitud</th>
-            <th>#</th>
-            <th>Pago</th>
-            <th>Comprobante</th>
-            <th>Estado</th>
+            <th>ID</th><th>Nombre</th><th>Teléfono</th><th>Solicitud</th>
+            <th>#</th><th>Pago</th><th>Comprobante</th><th>Estado</th>
           </tr>
         </thead>
         <tbody id="tablaBody">
@@ -224,6 +228,8 @@
           <div id="d_comprobante"><span class="sin-img">Sin comprobante</span></div>
         </div>
 
+        <hr class="seccion-sep">
+
         <!-- Cantidad_Pago -->
         <div class="campo">
           <label>Cantidad_Pago — ingresa el número (se guarda como "X Bs")</label>
@@ -239,12 +245,21 @@
           <div style="font-size:.72rem;color:var(--txt2);margin-top:.3rem;" id="msSelText"></div>
         </div>
 
-        <!-- Agregar_Direccion_Telefono (solo lectura) -->
+        <!-- Dir_Tel (solo lectura) -->
         <div class="campo">
           <label>Agregar_Direccion_Telefono (generado automáticamente)</label>
           <textarea id="a_dir_tel" rows="4" readonly
             style="background:#111;color:var(--verde-c);resize:none;"
             placeholder="Dirección - Teléfono - Monto de cada propiedad aprobada…"></textarea>
+        </div>
+
+        <hr class="seccion-sep">
+
+        <!-- Observación admin -->
+        <div class="campo">
+          <label>Observación interna — opcional (se incluye en correo y WhatsApp)</label>
+          <textarea id="a_obs_admin" rows="3"
+            placeholder="Ej: El cliente pagó en efectivo. Coordinar entrega el lunes."></textarea>
         </div>
 
         <!-- Link WhatsApp -->
@@ -254,7 +269,7 @@
             style="display:block;font-size:.78rem;word-break:break-all;color:var(--verde-c);">—</a>
         </div>
 
-        <!-- Acciones — UN SOLO BOTÓN -->
+        <!-- Acciones -->
         <div class="acciones">
           <button class="btn btn-oro btn-full" id="btnGuardar" onclick="guardar()">
             <span id="btnGuardarTxt">✅ Guardar, reservar y enviar correo</span>
@@ -381,6 +396,7 @@ function seleccionar(id) {
   document.getElementById('d_telefono').textContent  = clienteActual.telefono || '—';
   document.getElementById('d_solicitud').textContent = clienteActual.solicitud || '—';
 
+  // Comprobante
   const compWrap = document.getElementById('d_comprobante');
   if (clienteActual.url_pago && clienteActual.url_pago !== 'Sin comprobante') {
     compWrap.innerHTML = `<a href="${clienteActual.url_pago}" target="_blank">
@@ -390,9 +406,14 @@ function seleccionar(id) {
     compWrap.innerHTML = '<span class="sin-img">Sin comprobante</span>';
   }
 
+  // Cantidad_Pago
   const cantNum = (clienteActual.cant_pago || '').replace(/\s*Bs\s*/i, '').trim();
   document.getElementById('a_cant_pago').value = cantNum;
 
+  // Observación
+  document.getElementById('a_obs_admin').value = clienteActual.obs_admin || '';
+
+  // Multi-select con estado de reserva
   const idsSolicitud = (clienteActual.solicitud || '')
     .split(',').map(x => x.trim()).filter(Boolean);
   construirMultiSelect(idsSolicitud);
@@ -403,6 +424,7 @@ function seleccionar(id) {
 
   document.getElementById('a_dir_tel').value = clienteActual.dir_tel || '';
 
+  // WhatsApp
   if (clienteActual.url_wa) {
     document.getElementById('d_wa_link').href        = clienteActual.url_wa;
     document.getElementById('d_wa_link').textContent = clienteActual.url_wa;
@@ -418,15 +440,20 @@ function seleccionar(id) {
 }
 
 /* ══════════════════════════════════════════════════
-   MULTI-SELECT
+   MULTI-SELECT — muestra RESERVADO si ya está ocupada
 ══════════════════════════════════════════════════ */
 function construirMultiSelect(idsSolicitud) {
   const wrap = document.getElementById('msWrap');
   let html = '';
 
   idsSolicitud.forEach(id => {
+    // Buscar en terrenos y alquileres (datos frescos con estado actualizado)
     const t = terrenos.find(x => x.id === id);
     const a = alquileres.find(x => x.id === id);
+
+    const estadoProp = t ? t.estado : (a ? a.estado : '');
+    const estaReservado = estadoProp.toLowerCase() === 'reservado';
+
     const label = t
       ? `${id} — ${t.nombre || t.ubicacion || ''}`
       : a
@@ -434,11 +461,21 @@ function construirMultiSelect(idsSolicitud) {
         : id;
     const tipo = t ? 'Terreno' : a ? 'Alquiler' : '—';
 
-    html += `<div class="ms-opt">
-      <input type="checkbox" data-val="${id}" onchange="actualizarMsTexto()">
-      <label onclick="this.previousElementSibling.click()">${label}</label>
-      <span class="ms-tipo">${tipo}</span>
-    </div>`;
+    if (estaReservado) {
+      // Opción deshabilitada visualmente, checkbox bloqueado
+      html += `<div class="ms-opt ms-reservado">
+        <input type="checkbox" data-val="${id}" disabled>
+        <label>${label}</label>
+        <span class="ms-tipo">${tipo}</span>
+        <span class="badge-res">RESERVADO</span>
+      </div>`;
+    } else {
+      html += `<div class="ms-opt">
+        <input type="checkbox" data-val="${id}" onchange="actualizarMsTexto()">
+        <label onclick="this.previousElementSibling.click()">${label}</label>
+        <span class="ms-tipo">${tipo}</span>
+      </div>`;
+    }
   });
 
   wrap.innerHTML = html ||
@@ -453,36 +490,38 @@ function actualizarMsTexto() {
 }
 
 function getSeleccionados() {
-  return [...document.querySelectorAll('#msWrap input[type="checkbox"]:checked')]
+  return [...document.querySelectorAll('#msWrap input[type="checkbox"]:checked:not(:disabled)')]
     .map(cb => cb.dataset.val);
 }
 
 function setSeleccionados(ids) {
-  document.querySelectorAll('#msWrap input[type="checkbox"]').forEach(cb => {
+  document.querySelectorAll('#msWrap input[type="checkbox"]:not(:disabled)').forEach(cb => {
     cb.checked = ids.includes(cb.dataset.val);
   });
   actualizarMsTexto();
 }
 
 /* ══════════════════════════════════════════════════
-   GUARDAR — hace todo: guarda datos, reserva y envía correo
+   GUARDAR — guarda, reserva, envía correo
 ══════════════════════════════════════════════════ */
 async function guardar() {
   if (!clienteActual) return;
 
-  document.getElementById('btnGuardar').disabled           = true;
-  document.getElementById('btnGuardarTxt').style.display   = 'none';
-  document.getElementById('btnGuardarSpin').style.display  = 'inline';
+  document.getElementById('btnGuardar').disabled          = true;
+  document.getElementById('btnGuardarTxt').style.display  = 'none';
+  document.getElementById('btnGuardarSpin').style.display = 'inline';
 
   const casasEnviar  = getSeleccionados().join(',');
   const cantidadPago = document.getElementById('a_cant_pago').value.trim();
+  const obsAdmin     = document.getElementById('a_obs_admin').value.trim();
 
   const params = new URLSearchParams({
     accion:        'admin_actualizar',
     id_cliente:    clienteActual.id,
     cantidad_pago: cantidadPago,
     casas_enviar:  casasEnviar,
-    enviar_correo: 'true'
+    enviar_correo: 'true',
+    obs_admin:     obsAdmin
   });
 
   try {
@@ -514,9 +553,9 @@ async function guardar() {
     toast('⚠️', 'Error de red', err.message, false);
   }
 
-  document.getElementById('btnGuardar').disabled           = false;
-  document.getElementById('btnGuardarTxt').style.display   = 'inline';
-  document.getElementById('btnGuardarSpin').style.display  = 'none';
+  document.getElementById('btnGuardar').disabled          = false;
+  document.getElementById('btnGuardarTxt').style.display  = 'inline';
+  document.getElementById('btnGuardarSpin').style.display = 'none';
 }
 
 /* ══════════════════════════════════════════════════
