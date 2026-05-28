@@ -5,41 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin — Casas Chavez</title>
   <style>
-    /* ── RESET & BASE ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --verde:      #1a3a2a;
-      --verde-m:    #2d6a4f;
-      --verde-c:    #52b788;
-      --oro:        #c9984c;
-      --oro-c:      #e8d5a3;
-      --bg:         #0f0f0f;
-      --bg2:        #181818;
-      --bg3:        #222;
-      --borde:      #2a2a2a;
-      --txt:        #e8e8e8;
-      --txt2:       #888;
-      --rojo:       #dc2626;
-      --verde-ok:   #16a34a;
-      --radio:      10px;
+      --verde:   #1a3a2a;
+      --verde-m: #2d6a4f;
+      --verde-c: #52b788;
+      --oro:     #c9984c;
+      --oro-c:   #e8d5a3;
+      --bg:      #0f0f0f;
+      --bg2:     #181818;
+      --bg3:     #222;
+      --borde:   #2a2a2a;
+      --txt:     #e8e8e8;
+      --txt2:    #888;
+      --radio:   10px;
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--txt); min-height: 100vh; font-size: 14px; }
     a { color: var(--verde-c); }
-
-    /* ── LOGIN ────────────────────────────────────────────── */
-    #loginWrap {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    }
-    .login-box {
-      background: var(--bg2); border: 1px solid var(--borde); border-radius: 16px;
-      padding: 2.4rem 2.2rem; width: 100%; max-width: 340px; text-align: center;
-    }
-    .login-box h2 { font-size: 1.3rem; color: var(--oro-c); margin-bottom: 1.4rem; }
-    .login-error { color: #f87171; font-size: .8rem; margin-top: .5rem; display: none; }
-
-    /* ── APP ──────────────────────────────────────────────── */
-    #appWrap { display: none; }
 
     /* Topbar */
     .topbar {
@@ -51,57 +34,39 @@
     .topbar-right { display: flex; align-items: center; gap: .6rem; }
     #lastUpdate { font-size: .72rem; color: rgba(255,255,255,.4); }
 
-    /* Layout principal */
-    .layout { display: grid; grid-template-columns: 1fr 420px; gap: 1rem; padding: 1rem; min-height: calc(100vh - 52px); }
+    /* Layout */
+    .layout { display: grid; grid-template-columns: 1fr 430px; gap: 1rem; padding: 1rem; min-height: calc(100vh - 52px); }
 
-    /* ── TABLA ────────────────────────────────────────────── */
+    /* Panel */
     .panel { background: var(--bg2); border: 1px solid var(--borde); border-radius: var(--radio); padding: 1.1rem; }
     .panel-title { font-size: .85rem; font-weight: 700; color: var(--oro-c); margin-bottom: .9rem; display: flex; align-items: center; gap: .5rem; }
-    .panel-title span { color: var(--txt2); font-weight: 400; font-size: .78rem; }
 
+    /* Filtros */
     .filtros { display: flex; gap: .5rem; margin-bottom: .8rem; flex-wrap: wrap; }
 
+    /* Tabla */
     .tbl-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-    thead th {
-      background: var(--verde); color: var(--oro-c); padding: .55rem .7rem;
-      text-align: left; font-size: .75rem; letter-spacing: .04em; white-space: nowrap;
-    }
+    thead th { background: var(--verde); color: var(--oro-c); padding: .55rem .7rem; text-align: left; font-size: .75rem; letter-spacing: .04em; white-space: nowrap; }
     tbody tr { border-bottom: 1px solid var(--borde); cursor: pointer; transition: background .15s; }
     tbody tr:hover { background: var(--bg3); }
     tbody tr.activa { background: #1a3a2a !important; }
     tbody td { padding: .5rem .7rem; vertical-align: middle; white-space: nowrap; }
-
-    .thumb {
-      width: 38px; height: 38px; object-fit: cover; border-radius: 5px;
-      border: 1px solid var(--borde); cursor: pointer; display: block;
-    }
+    .thumb { width: 38px; height: 38px; object-fit: cover; border-radius: 5px; border: 1px solid var(--borde); cursor: pointer; display: block; }
     .sin-img { color: var(--txt2); font-size: .7rem; }
 
     /* Badges */
-    .badge {
-      display: inline-block; font-size: .68rem; font-weight: 700;
-      padding: .2rem .6rem; border-radius: 50px; letter-spacing: .04em;
-    }
+    .badge { display: inline-block; font-size: .68rem; font-weight: 700; padding: .2rem .6rem; border-radius: 50px; letter-spacing: .04em; }
     .badge-pendiente { background: #3b2f00; color: #fbbf24; }
     .badge-aprobado  { background: #052e16; color: #86efac; }
-    .badge-rechazado { background: #450a0a; color: #fca5a5; }
 
-    /* ── PANEL DETALLE ────────────────────────────────────── */
+    /* Detalle */
     .detail-wrap { display: flex; flex-direction: column; gap: 1rem; }
-
-    .placeholder {
-      background: var(--bg2); border: 1px solid var(--borde); border-radius: var(--radio);
-      padding: 3rem 1rem; text-align: center; color: var(--txt2); font-size: .85rem;
-    }
-
+    .placeholder { background: var(--bg2); border: 1px solid var(--borde); border-radius: var(--radio); padding: 3rem 1rem; text-align: center; color: var(--txt2); font-size: .85rem; }
     #detailPanel { display: none; }
 
-    /* Ficha cliente */
-    .ficha {
-      background: var(--bg3); border-radius: 8px; padding: .9rem 1rem;
-      display: grid; grid-template-columns: 1fr 1fr; gap: .4rem .8rem; margin-bottom: .8rem;
-    }
+    /* Ficha */
+    .ficha { background: var(--bg3); border-radius: 8px; padding: .9rem 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: .4rem .8rem; margin-bottom: .8rem; }
     .ficha-item .lbl { font-size: .68rem; color: var(--txt2); text-transform: uppercase; letter-spacing: .04em; }
     .ficha-item .val { font-size: .88rem; color: var(--txt); word-break: break-word; }
     .ficha-item.full { grid-column: 1 / -1; }
@@ -109,16 +74,13 @@
     /* Comprobante */
     .comprobante-wrap { margin-bottom: .8rem; }
     .comprobante-wrap .lbl { font-size: .68rem; color: var(--txt2); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .4rem; }
-    .comprobante-img {
-      max-height: 140px; border-radius: 7px; border: 1px solid var(--borde);
-      cursor: pointer; display: block; transition: opacity .2s;
-    }
+    .comprobante-img { max-height: 140px; border-radius: 7px; border: 1px solid var(--borde); cursor: pointer; display: block; transition: opacity .2s; }
     .comprobante-img:hover { opacity: .85; }
 
-    /* Campos de edición */
+    /* Campos */
     .campo { margin-bottom: .85rem; }
     .campo label { display: block; font-size: .72rem; color: var(--txt2); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .35rem; }
-    input[type="text"], input[type="number"], select, textarea {
+    input[type="text"], select, textarea {
       width: 100%; background: var(--bg3); border: 1px solid var(--borde);
       border-radius: 7px; color: var(--txt); font-family: inherit; font-size: .88rem;
       padding: .55rem .8rem; outline: none; transition: border-color .2s;
@@ -126,253 +88,197 @@
     input:focus, select:focus, textarea:focus { border-color: var(--oro); }
     input::placeholder, textarea::placeholder { color: var(--txt2); }
 
-    /* Multi-select de propiedades */
-    .ms-wrap {
-      border: 1px solid var(--borde); border-radius: 7px; background: var(--bg3);
-      max-height: 160px; overflow-y: auto; padding: .4rem;
-    }
-    .ms-opt {
-      display: flex; align-items: center; gap: .5rem;
-      padding: .3rem .4rem; border-radius: 5px; cursor: pointer; transition: background .15s;
-    }
+    /* Multi-select */
+    .ms-wrap { border: 1px solid var(--borde); border-radius: 7px; background: var(--bg3); max-height: 160px; overflow-y: auto; padding: .4rem; }
+    .ms-opt { display: flex; align-items: center; gap: .5rem; padding: .3rem .4rem; border-radius: 5px; cursor: pointer; transition: background .15s; }
     .ms-opt:hover { background: var(--bg2); }
-    .ms-opt input[type="checkbox"] { accent-color: var(--oro); width: 14px; height: 14px; cursor: pointer; }
-    .ms-opt label { cursor: pointer; font-size: .83rem; color: var(--txt); }
-    .ms-opt .ms-tipo { font-size: .68rem; color: var(--txt2); margin-left: auto; }
+    .ms-opt input[type="checkbox"] { accent-color: var(--oro); width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
+    .ms-opt label { cursor: pointer; font-size: .83rem; color: var(--txt); flex: 1; }
+    .ms-opt .ms-tipo { font-size: .68rem; color: var(--txt2); }
 
     /* Botones */
-    .btn {
-      display: inline-flex; align-items: center; gap: .4rem;
-      border: none; border-radius: 8px; font-family: inherit; font-size: .83rem;
-      font-weight: 600; padding: .6rem 1.1rem; cursor: pointer; transition: all .2s;
-      text-decoration: none;
-    }
+    .btn { display: inline-flex; align-items: center; gap: .4rem; border: none; border-radius: 8px; font-family: inherit; font-size: .83rem; font-weight: 600; padding: .6rem 1.1rem; cursor: pointer; transition: all .2s; text-decoration: none; }
     .btn:disabled { opacity: .5; cursor: not-allowed; }
-    .btn-verde   { background: var(--verde-m); color: #fff; }
+    .btn-verde { background: var(--verde-m); color: #fff; }
     .btn-verde:hover:not(:disabled) { background: var(--verde-c); color: var(--verde); }
-    .btn-oro     { background: var(--oro); color: var(--verde); }
+    .btn-oro   { background: var(--oro); color: var(--verde); }
     .btn-oro:hover:not(:disabled) { background: var(--oro-c); }
-    .btn-wa      { background: #16a34a; color: #fff; }
+    .btn-wa    { background: #16a34a; color: #fff; }
     .btn-wa:hover:not(:disabled) { background: #15803d; }
-    .btn-gris    { background: var(--bg3); color: var(--txt2); border: 1px solid var(--borde); }
+    .btn-gris  { background: var(--bg3); color: var(--txt2); border: 1px solid var(--borde); }
     .btn-gris:hover { background: #2f2f2f; color: var(--txt); }
-    .btn-sm      { padding: .38rem .75rem; font-size: .78rem; border-radius: 6px; }
-    .btn-full    { width: 100%; justify-content: center; }
-
-    .acciones { display: flex; flex-direction: column; gap: .6rem; }
+    .btn-sm    { padding: .38rem .75rem; font-size: .78rem; border-radius: 6px; }
+    .btn-full  { width: 100%; justify-content: center; }
+    .acciones  { display: flex; flex-direction: column; gap: .6rem; }
 
     /* Spinner */
-    .spinner {
-      width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3);
-      border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite;
-      display: inline-block;
-    }
+    .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── TOAST ────────────────────────────────────────────── */
-    #toast {
-      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
-      background: var(--bg2); border: 1px solid var(--borde); border-radius: 12px;
-      padding: .9rem 1.2rem; min-width: 260px; max-width: 340px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.6);
-      display: none; gap: .7rem; align-items: flex-start;
-    }
+    /* Toast */
+    #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; background: var(--bg2); border: 1px solid var(--borde); border-radius: 12px; padding: .9rem 1.2rem; min-width: 260px; max-width: 340px; box-shadow: 0 8px 32px rgba(0,0,0,.6); display: none; gap: .7rem; align-items: flex-start; }
     #toast.show { display: flex; animation: slideUp .25s ease; }
-    .toast-icon { font-size: 1.4rem; line-height: 1; }
+    .toast-icon  { font-size: 1.4rem; line-height: 1; }
     .toast-title { font-weight: 700; font-size: .9rem; margin-bottom: .15rem; }
-    .toast-msg { font-size: .78rem; color: var(--txt2); line-height: 1.4; }
+    .toast-msg   { font-size: .78rem; color: var(--txt2); line-height: 1.4; }
     @keyframes slideUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 
-    /* ── LIGHTBOX ─────────────────────────────────────────── */
-    #lightbox {
-      position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 9998;
-      display: none; align-items: center; justify-content: center;
-    }
+    /* Lightbox */
+    #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 9998; display: none; align-items: center; justify-content: center; }
     #lightbox.open { display: flex; }
     #lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
-    #lightbox-close {
-      position: absolute; top: 1rem; right: 1.2rem; font-size: 1.8rem;
-      color: #fff; cursor: pointer; line-height: 1;
-    }
+    #lb-close { position: absolute; top: 1rem; right: 1.2rem; font-size: 1.8rem; color: #fff; cursor: pointer; line-height: 1; }
 
-    /* ── RESPONSIVE ───────────────────────────────────────── */
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══════════════════════════════════════════════ -->
-<div id="loginWrap">
-  <div class="login-box">
-    <h2>🏠 Admin — Casas Chavez</h2>
-    <div class="campo">
-      <label>Contraseña</label>
-      <input type="password" id="pwInput" placeholder="••••••••"
-        onkeydown="if(event.key==='Enter') login()" />
-    </div>
-    <button class="btn btn-oro btn-full" onclick="login()">Ingresar</button>
-    <div class="login-error" id="loginErr">Contraseña incorrecta.</div>
+<!-- TOPBAR -->
+<div class="topbar">
+  <h1>🏠 Admin — Casas Chavez</h1>
+  <div class="topbar-right">
+    <span id="lastUpdate"></span>
+    <button class="btn btn-gris btn-sm" onclick="cargarTodo()">↺ Actualizar</button>
   </div>
 </div>
 
-<!-- ══ APP ════════════════════════════════════════════════ -->
-<div id="appWrap">
+<!-- LAYOUT -->
+<div class="layout">
 
-  <!-- Topbar -->
-  <div class="topbar">
-    <h1>🏠 Panel Admin — Casas Chavez</h1>
-    <div class="topbar-right">
-      <span id="lastUpdate"></span>
-      <button class="btn btn-gris btn-sm" onclick="cargarTodo()">↺ Actualizar</button>
-      <button class="btn btn-gris btn-sm" onclick="logout()">Salir</button>
+  <!-- TABLA -->
+  <div class="panel">
+    <div class="panel-title">📋 Solicitudes</div>
+
+    <div class="filtros">
+      <select id="filtroBusq" onchange="filtrar()" style="max-width:160px;">
+        <option value="">Todos</option>
+        <option value="pendiente">Sin gestionar</option>
+        <option value="aprobado">Gestionados</option>
+      </select>
+      <input type="text" id="filtroTexto" placeholder="Buscar nombre o ID…"
+        oninput="filtrar()" style="max-width:220px;" />
+      <span id="contadorTotal" style="font-size:.78rem;color:var(--txt2);align-self:center;"></span>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Solicitud</th>
+            <th>#</th>
+            <th>Pago</th>
+            <th>Comprobante</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaBody">
+          <tr><td colspan="8" style="text-align:center;color:var(--txt2);padding:2rem;">Cargando…</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- Layout -->
-  <div class="layout">
+  <!-- DETALLE -->
+  <div class="detail-wrap">
 
-    <!-- COLUMNA IZQUIERDA: tabla de solicitudes -->
-    <div class="panel">
-      <div class="panel-title">
-        📋 Solicitudes
-        <span id="contadorTotal"></span>
-      </div>
+    <div class="placeholder" id="placeholder">
+      <div style="font-size:2rem;margin-bottom:.5rem;">👆</div>
+      Selecciona una solicitud de la tabla
+    </div>
 
-      <div class="filtros">
-        <select id="filtroBusq" onchange="filtrar()" style="max-width:160px;">
-          <option value="">Todos</option>
-          <option value="pendiente">Sin gestionar</option>
-          <option value="aprobado">Aprobados</option>
-        </select>
-        <input type="text" id="filtroTexto" placeholder="Buscar por nombre o ID…"
-          oninput="filtrar()" style="max-width:220px;" />
-      </div>
+    <div id="detailPanel">
+      <div class="panel">
+        <div class="panel-title">✏️ Gestionar solicitud</div>
 
-      <div class="tbl-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Teléfono</th>
-              <th>Solicitud</th>
-              <th>#</th>
-              <th>Pago</th>
-              <th>Comprobante</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody id="tablaBody">
-            <tr><td colspan="8" style="text-align:center;color:var(--txt2);padding:2rem;">Cargando…</td></tr>
-          </tbody>
-        </table>
+        <!-- Ficha -->
+        <div class="ficha">
+          <div class="ficha-item">
+            <div class="lbl">ID</div>
+            <div class="val" id="d_id">—</div>
+          </div>
+          <div class="ficha-item">
+            <div class="lbl">Nombre</div>
+            <div class="val" id="d_nombre">—</div>
+          </div>
+          <div class="ficha-item">
+            <div class="lbl">Correo</div>
+            <div class="val" id="d_correo" style="font-size:.8rem;word-break:break-all;">—</div>
+          </div>
+          <div class="ficha-item">
+            <div class="lbl">Teléfono</div>
+            <div class="val" id="d_telefono">—</div>
+          </div>
+          <div class="ficha-item full">
+            <div class="lbl">Propiedades solicitadas</div>
+            <div class="val" id="d_solicitud" style="font-weight:700;color:var(--oro-c);">—</div>
+          </div>
+        </div>
+
+        <!-- Comprobante -->
+        <div class="comprobante-wrap">
+          <div class="lbl">Comprobante de pago</div>
+          <div id="d_comprobante"><span class="sin-img">Sin comprobante</span></div>
+        </div>
+
+        <!-- Cantidad_Pago -->
+        <div class="campo">
+          <label>Cantidad_Pago — ingresa el número (se guarda como "X Bs")</label>
+          <input type="text" id="a_cant_pago" placeholder="Ej: 2" />
+        </div>
+
+        <!-- Casas_Enviar — solo IDs de la solicitud -->
+        <div class="campo">
+          <label>Casas_Enviar — marca las propiedades a aprobar</label>
+          <div class="ms-wrap" id="msWrap">
+            <div style="color:var(--txt2);font-size:.8rem;padding:.5rem;">Selecciona un cliente primero…</div>
+          </div>
+          <div style="font-size:.72rem;color:var(--txt2);margin-top:.3rem;" id="msSelText"></div>
+        </div>
+
+        <!-- Agregar_Direccion_Telefono (solo lectura, generado al guardar) -->
+        <div class="campo">
+          <label>Agregar_Direccion_Telefono (generado automáticamente)</label>
+          <textarea id="a_dir_tel" rows="4" readonly
+            style="background:#111;color:var(--verde-c);resize:none;"
+            placeholder="Dirección - Teléfono - Monto de cada propiedad aprobada…"></textarea>
+        </div>
+
+        <!-- Link WhatsApp -->
+        <div class="campo" id="waWrap" style="display:none;">
+          <label>Link WhatsApp generado</label>
+          <a id="d_wa_link" href="#" target="_blank"
+            style="display:block;font-size:.78rem;word-break:break-all;color:var(--verde-c);">—</a>
+        </div>
+
+        <!-- Acciones -->
+        <div class="acciones">
+          <button class="btn btn-verde btn-full" id="btnGuardar" onclick="guardar(false)">
+            <span id="btnGuardarTxt">💾 Guardar — envía correo al cliente</span>
+            <span id="btnGuardarSpin" style="display:none;"><span class="spinner"></span> Guardando…</span>
+          </button>
+          <button class="btn btn-oro btn-full" id="btnConfirmar" onclick="guardar(true)">
+            <span id="btnConfTxt">✅ Confirmar y marcar como Reservado</span>
+            <span id="btnConfSpin" style="display:none;"><span class="spinner"></span> Confirmando…</span>
+          </button>
+          <button class="btn btn-wa btn-full" id="btnWA" onclick="abrirWhatsApp()" style="display:none;">
+            💬 Abrir WhatsApp
+          </button>
+        </div>
+
       </div>
     </div>
 
-    <!-- COLUMNA DERECHA: detalle + acciones -->
-    <div class="detail-wrap">
-
-      <div class="placeholder" id="placeholder">
-        <div style="font-size:2rem;margin-bottom:.5rem;">👆</div>
-        Selecciona una solicitud de la tabla
-      </div>
-
-      <div id="detailPanel">
-        <div class="panel">
-          <div class="panel-title">✏️ Gestionar solicitud</div>
-
-          <!-- Ficha del cliente -->
-          <div class="ficha">
-            <div class="ficha-item">
-              <div class="lbl">ID</div>
-              <div class="val" id="d_id">—</div>
-            </div>
-            <div class="ficha-item">
-              <div class="lbl">Nombre completo</div>
-              <div class="val" id="d_nombre">—</div>
-            </div>
-            <div class="ficha-item">
-              <div class="lbl">Correo</div>
-              <div class="val" id="d_correo" style="font-size:.8rem;word-break:break-all;">—</div>
-            </div>
-            <div class="ficha-item">
-              <div class="lbl">Teléfono</div>
-              <div class="val" id="d_telefono">—</div>
-            </div>
-            <div class="ficha-item full">
-              <div class="lbl">Propiedades solicitadas</div>
-              <div class="val" id="d_solicitud" style="font-weight:700;color:var(--oro-c);">—</div>
-            </div>
-          </div>
-
-          <!-- Comprobante de pago -->
-          <div class="comprobante-wrap">
-            <div class="lbl">Comprobante de pago</div>
-            <div id="d_comprobante"><span class="sin-img">Sin comprobante</span></div>
-          </div>
-
-          <!-- Cantidad_Pago -->
-          <div class="campo">
-            <label>Cantidad_Pago (ingresa el número, se guarda como "X Bs")</label>
-            <input type="text" id="a_cant_pago" placeholder="Ej: 2" />
-          </div>
-
-          <!-- Casas_Enviar (multi-select dinámico) -->
-          <div class="campo">
-            <label>Casas_Enviar — selecciona las propiedades a enviar</label>
-            <div class="ms-wrap" id="msWrap">
-              <div style="color:var(--txt2);font-size:.8rem;padding:.5rem;">Cargando propiedades…</div>
-            </div>
-            <div style="font-size:.72rem;color:var(--txt2);margin-top:.3rem;" id="msSelText"></div>
-          </div>
-
-          <!-- Datos generados automáticamente -->
-          <div class="campo">
-            <label>Agregar_Direccion_Telefono (generado automáticamente al guardar)</label>
-            <textarea id="a_dir_tel" rows="4" readonly
-              style="background:#111;color:var(--verde-c);resize:none;"
-              placeholder="Se llenará automáticamente con dirección, teléfono y precio de cada propiedad seleccionada…"></textarea>
-          </div>
-
-          <!-- url_whatsapp generada -->
-          <div class="campo" id="waWrap" style="display:none;">
-            <label>Link de WhatsApp generado</label>
-            <a id="d_wa_link" href="#" target="_blank"
-              style="display:block;font-size:.78rem;word-break:break-all;color:var(--verde-c);">—</a>
-          </div>
-
-          <!-- Acciones -->
-          <div class="acciones">
-            <button class="btn btn-verde btn-full" id="btnGuardar" onclick="guardar(false)">
-              <span id="btnGuardarTxt">💾 Guardar cambios</span>
-              <span id="btnGuardarSpin" style="display:none;"><span class="spinner"></span> Guardando…</span>
-            </button>
-            <button class="btn btn-oro btn-full" id="btnConfirmar" onclick="guardar(true)">
-              <span id="btnConfTxt">✅ Confirmar y cambiar estado a Reservado</span>
-              <span id="btnConfSpin" style="display:none;"><span class="spinner"></span> Confirmando…</span>
-            </button>
-            <button class="btn btn-verde btn-full" id="btnCorreo" onclick="enviarCorreo()">
-              <span id="btnCorreoTxt">📧 Enviar correo de confirmación al cliente</span>
-              <span id="btnCorreoSpin" style="display:none;"><span class="spinner"></span> Enviando…</span>
-            </button>
-            <button class="btn btn-wa btn-full" id="btnWA" onclick="abrirWhatsApp()" style="display:none;">
-              <span>💬 Abrir WhatsApp</span>
-            </button>
-          </div>
-
-        </div>
-      </div><!-- /detailPanel -->
-
-    </div><!-- /detail-wrap -->
-  </div><!-- /layout -->
-</div><!-- /appWrap -->
+  </div>
+</div>
 
 <!-- LIGHTBOX -->
 <div id="lightbox" onclick="cerrarLightbox()">
-  <div id="lightbox-close" onclick="cerrarLightbox()">✕</div>
-  <img id="lightboxImg" src="" alt="Comprobante" onclick="event.stopPropagation()" />
+  <div id="lb-close" onclick="cerrarLightbox()">✕</div>
+  <img id="lbImg" src="" alt="Comprobante" onclick="event.stopPropagation()" />
 </div>
 
 <!-- TOAST -->
@@ -385,145 +291,54 @@
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    CONFIG
-══════════════════════════════════════════════════════════ */
-const APPS_URL  = 'https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec';
-const PASSWORD  = 'casaschavez2026';
+══════════════════════════════════════════════════ */
+const APPS_URL = 'https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec';
 
-/* ══════════════════════════════════════════════════════════
-   ESTADO GLOBAL
-══════════════════════════════════════════════════════════ */
-let clientes       = [];
-let terrenos       = [];
-let alquileres     = [];
-let clienteActual  = null;
-let toastTimer     = null;
+let clientes      = [];
+let terrenos      = [];
+let alquileres    = [];
+let clienteActual = null;
+let toastTimer    = null;
 
-/* ══════════════════════════════════════════════════════════
-   LOGIN / LOGOUT
-══════════════════════════════════════════════════════════ */
-function login() {
-  if (document.getElementById('pwInput').value === PASSWORD) {
-    document.getElementById('loginWrap').style.display = 'none';
-    document.getElementById('appWrap').style.display   = 'block';
-    cargarTodo();
-  } else {
-    document.getElementById('loginErr').style.display = 'block';
-  }
-}
-function logout() {
-  document.getElementById('loginWrap').style.display = 'flex';
-  document.getElementById('appWrap').style.display   = 'none';
-  document.getElementById('pwInput').value = '';
-}
-
-/* ══════════════════════════════════════════════════════════
-   CARGA DE DATOS
-══════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   CARGA INICIAL
+══════════════════════════════════════════════════ */
 async function cargarTodo() {
-  // Cargar propiedades (terrenos + alquileres) y clientes en paralelo
+  document.getElementById('tablaBody').innerHTML =
+    '<tr><td colspan="8" style="text-align:center;color:var(--txt2);padding:2rem;">Cargando…</td></tr>';
   try {
     const [rProp, rCli] = await Promise.all([
       fetch(APPS_URL).then(r => r.json()),
       fetch(APPS_URL + '?action=clientes').then(r => r.json())
     ]);
-
     terrenos   = rProp.terrenos   || [];
     alquileres = rProp.alquileres || [];
-    clientes   = (rCli.clientes   || []).reverse(); // más recientes primero
-
-    // multiselect se construye al seleccionar cliente
+    clientes   = (rCli.clientes   || []).reverse();
     filtrar();
     document.getElementById('lastUpdate').textContent =
       'Actualizado: ' + new Date().toLocaleTimeString();
   } catch(err) {
-    toast('⚠️', 'Error al cargar datos', err.message, false);
+    toast('⚠️', 'Error al cargar', err.message, false);
   }
 }
 
-/* ══════════════════════════════════════════════════════════
-   MULTI-SELECT de propiedades
-   Solo muestra los IDs que el cliente seleccionó en su solicitud
-══════════════════════════════════════════════════════════ */
-function construirMultiSelectFiltrado(idsSolicitud) {
-  const wrap = document.getElementById('msWrap');
-  let html = '';
-
-  idsSolicitud.forEach(id => {
-    const terreno  = terrenos.find(t => t.id === id);
-    const alquiler = alquileres.find(a => a.id === id);
-
-    if (terreno) {
-      html += `<div class="ms-opt">
-        <input type="checkbox" id="ms_${terreno.id}" value="${terreno.id}" onchange="actualizarMsTexto()">
-        <label for="ms_${terreno.id}">${terreno.id} — ${terreno.nombre || terreno.ubicacion || ''}</label>
-        <span class="ms-tipo">Terreno</span>
-      </div>`;
-    } else if (alquiler) {
-      html += `<div class="ms-opt">
-        <input type="checkbox" id="ms_${alquiler.id}" value="${alquiler.id}" onchange="actualizarMsTexto()">
-        <label for="ms_${alquiler.id}">${alquiler.id} — ${alquiler.descripcion || alquiler.direccion || ''}</label>
-        <span class="ms-tipo">Alquiler</span>
-      </div>`;
-    } else {
-      html += `<div class="ms-opt">
-        <input type="checkbox" id="ms_${id}" value="${id}" onchange="actualizarMsTexto()">
-        <label for="ms_${id}">${id}</label>
-        <span class="ms-tipo">—</span>
-      </div>`;
-    }
-  });
-
-  wrap.innerHTML = html || '<div style="color:var(--txt2);font-size:.8rem;padding:.5rem;">Sin propiedades en esta solicitud</div>';
-}
-
-function actualizarMsTexto() {
-  const sel = getSeleccionados();
-  document.getElementById('msSelText').textContent =
-    sel.length ? 'Seleccionados: ' + sel.join(', ') : '';
-}
-
-function getSeleccionados() {
-  return [...document.querySelectorAll('#msWrap input[type="checkbox"]:checked')]
-    .map(cb => cb.value);
-}
-
-function setSeleccionados(ids) {
-  document.querySelectorAll('#msWrap input[type="checkbox"]')
-    .forEach(cb => cb.checked = false);
-  ids.forEach(id => {
-    const cb = document.getElementById('ms_' + id.trim());
-    if (cb) cb.checked = true;
-  });
-  actualizarMsTexto();
-}
-
-
-/* ══════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    TABLA
-══════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function filtrar() {
   const filtro = document.getElementById('filtroBusq').value;
   const texto  = document.getElementById('filtroTexto').value.toLowerCase().trim();
-
   let lista = clientes;
-
-  if (filtro === 'pendiente') {
-    lista = lista.filter(c => !c.casas_enviar);
-  } else if (filtro === 'aprobado') {
-    lista = lista.filter(c => !!c.casas_enviar);
-  }
-
-  if (texto) {
-    lista = lista.filter(c =>
-      (c.nombre + ' ' + c.apellido).toLowerCase().includes(texto) ||
-      c.id.toLowerCase().includes(texto)
-    );
-  }
-
-  renderTabla(lista);
+  if (filtro === 'pendiente') lista = lista.filter(c => !c.casas_enviar);
+  if (filtro === 'aprobado')  lista = lista.filter(c =>  !!c.casas_enviar);
+  if (texto) lista = lista.filter(c =>
+    (c.nombre + ' ' + c.apellido).toLowerCase().includes(texto) ||
+    c.id.toLowerCase().includes(texto)
+  );
   document.getElementById('contadorTotal').textContent = lista.length + ' solicitudes';
+  renderTabla(lista);
 }
 
 function renderTabla(lista) {
@@ -532,24 +347,19 @@ function renderTabla(lista) {
     tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--txt2);padding:2rem;">Sin resultados</td></tr>';
     return;
   }
-
   tbody.innerHTML = lista.map(c => {
-    // Badge estado
-    const tieneGestion = !!c.casas_enviar;
-    const badge = tieneGestion
+    const badge = c.casas_enviar
       ? '<span class="badge badge-aprobado">Gestionado</span>'
       : '<span class="badge badge-pendiente">Pendiente</span>';
-
-    // Comprobante miniatura
     const thumb = (c.url_pago && c.url_pago !== 'Sin comprobante')
-      ? `<img class="thumb" src="${c.url_pago}" alt="pago" onclick="event.stopPropagation();abrirLightbox('${c.url_pago}')" />`
+      ? `<img class="thumb" src="${c.url_pago}" alt="pago"
+           onclick="event.stopPropagation();abrirLightbox('${c.url_pago}')" />`
       : '<span class="sin-img">—</span>';
-
     return `<tr onclick="seleccionar('${c.id}')" data-id="${c.id}">
       <td style="font-family:monospace;font-size:.75rem;">${c.id}</td>
       <td>${c.nombre} ${c.apellido}</td>
       <td>${c.telefono || '—'}</td>
-      <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;">${c.solicitud || '—'}</td>
+      <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;">${c.solicitud || '—'}</td>
       <td style="text-align:center;">${c.cant_casas || '—'}</td>
       <td>${c.cant_pago || '—'}</td>
       <td>${thumb}</td>
@@ -558,52 +368,49 @@ function renderTabla(lista) {
   }).join('');
 }
 
-/* ══════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    SELECCIONAR CLIENTE
-══════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function seleccionar(id) {
   clienteActual = clientes.find(c => c.id === id);
   if (!clienteActual) return;
 
-  // Highlight fila
   document.querySelectorAll('#tablaBody tr').forEach(tr => tr.classList.remove('activa'));
   const fila = document.querySelector(`#tablaBody tr[data-id="${id}"]`);
   if (fila) fila.classList.add('activa');
 
   // Ficha
-  document.getElementById('d_id').textContent       = clienteActual.id;
-  document.getElementById('d_nombre').textContent   = clienteActual.nombre + ' ' + clienteActual.apellido;
-  document.getElementById('d_correo').textContent   = clienteActual.correo  || '—';
-  document.getElementById('d_telefono').textContent = clienteActual.telefono || '—';
-  document.getElementById('d_solicitud').textContent= clienteActual.solicitud || '—';
+  document.getElementById('d_id').textContent        = clienteActual.id;
+  document.getElementById('d_nombre').textContent    = clienteActual.nombre + ' ' + clienteActual.apellido;
+  document.getElementById('d_correo').textContent    = clienteActual.correo   || '—';
+  document.getElementById('d_telefono').textContent  = clienteActual.telefono || '—';
+  document.getElementById('d_solicitud').textContent = clienteActual.solicitud || '—';
 
   // Comprobante
   const compWrap = document.getElementById('d_comprobante');
   if (clienteActual.url_pago && clienteActual.url_pago !== 'Sin comprobante') {
     compWrap.innerHTML = `<a href="${clienteActual.url_pago}" target="_blank">
       <img class="comprobante-img" src="${clienteActual.url_pago}" alt="Comprobante"
-        onclick="event.preventDefault(); abrirLightbox('${clienteActual.url_pago}')" />
-    </a>`;
+        onclick="event.preventDefault();abrirLightbox('${clienteActual.url_pago}')" /></a>`;
   } else {
     compWrap.innerHTML = '<span class="sin-img">Sin comprobante</span>';
   }
 
-  // Campos editables
-  // Cantidad_Pago: quitar " Bs" para mostrar solo el número
+  // Cantidad_Pago — mostrar solo el número
   const cantNum = (clienteActual.cant_pago || '').replace(/\s*Bs\s*/i, '').trim();
   document.getElementById('a_cant_pago').value = cantNum;
 
-  // Casas_Enviar — construir multiselect SOLO con IDs de esta solicitud
+  // Multi-select: SOLO con los IDs de la solicitud de este cliente
   const idsSolicitud = (clienteActual.solicitud || '')
     .split(',').map(x => x.trim()).filter(Boolean);
-  construirMultiSelectFiltrado(idsSolicitud);
+  construirMultiSelect(idsSolicitud);
 
-  // Preseleccionar los que ya fueron guardados en Casas_Enviar
+  // Preseleccionar los que ya están guardados en Casas_Enviar
   const casasGuardadas = (clienteActual.casas_enviar || '')
     .split(',').map(x => x.trim()).filter(Boolean);
   setSeleccionados(casasGuardadas);
 
-  // Agregar_Direccion_Telefono
+  // Dir_Tel
   document.getElementById('a_dir_tel').value = clienteActual.dir_tel || '';
 
   // WhatsApp
@@ -613,25 +420,72 @@ function seleccionar(id) {
     document.getElementById('waWrap').style.display  = 'block';
     document.getElementById('btnWA').style.display   = 'flex';
   } else {
-    document.getElementById('waWrap').style.display  = 'none';
-    document.getElementById('btnWA').style.display   = 'none';
+    document.getElementById('waWrap').style.display = 'none';
+    document.getElementById('btnWA').style.display  = 'none';
   }
 
-  // Mostrar panel
-  document.getElementById('placeholder').style.display  = 'none';
-  document.getElementById('detailPanel').style.display  = 'block';
+  document.getElementById('placeholder').style.display = 'none';
+  document.getElementById('detailPanel').style.display = 'block';
 }
 
-/* ══════════════════════════════════════════════════════════
-   GUARDAR — Apps Script accion=admin_actualizar
-══════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   MULTI-SELECT — solo IDs de la solicitud del cliente
+══════════════════════════════════════════════════ */
+function construirMultiSelect(idsSolicitud) {
+  const wrap = document.getElementById('msWrap');
+  let html = '';
+
+  idsSolicitud.forEach(id => {
+    const t = terrenos.find(x => x.id === id);
+    const a = alquileres.find(x => x.id === id);
+    const label = t
+      ? `${id} — ${t.nombre || t.ubicacion || ''}`
+      : a
+        ? `${id} — ${a.descripcion || a.direccion || ''}`
+        : id;
+    const tipo = t ? 'Terreno' : a ? 'Alquiler' : '—';
+
+    // Usar data-val para evitar colisión de IDs numéricos en el DOM
+    html += `<div class="ms-opt">
+      <input type="checkbox" data-val="${id}" onchange="actualizarMsTexto()">
+      <label onclick="this.previousElementSibling.click()">${label}</label>
+      <span class="ms-tipo">${tipo}</span>
+    </div>`;
+  });
+
+  wrap.innerHTML = html ||
+    '<div style="color:var(--txt2);font-size:.8rem;padding:.5rem;">Sin propiedades en esta solicitud</div>';
+  actualizarMsTexto();
+}
+
+function actualizarMsTexto() {
+  const sel = getSeleccionados();
+  document.getElementById('msSelText').textContent =
+    sel.length ? 'Seleccionados: ' + sel.join(', ') : '';
+}
+
+// Lee los valores usando data-val, NO getElementById
+function getSeleccionados() {
+  return [...document.querySelectorAll('#msWrap input[type="checkbox"]:checked')]
+    .map(cb => cb.dataset.val);
+}
+
+function setSeleccionados(ids) {
+  document.querySelectorAll('#msWrap input[type="checkbox"]').forEach(cb => {
+    cb.checked = ids.includes(cb.dataset.val);
+  });
+  actualizarMsTexto();
+}
+
+/* ══════════════════════════════════════════════════
+   GUARDAR — siempre envía correo al cliente
+══════════════════════════════════════════════════ */
 async function guardar(confirmar) {
   if (!clienteActual) return;
 
-  const btnId   = confirmar ? 'btnConfirmar' : 'btnGuardar';
-  const txtId   = confirmar ? 'btnConfTxt'   : 'btnGuardarTxt';
-  const spinId  = confirmar ? 'btnConfSpin'  : 'btnGuardarSpin';
-
+  const btnId  = confirmar ? 'btnConfirmar' : 'btnGuardar';
+  const txtId  = confirmar ? 'btnConfTxt'   : 'btnGuardarTxt';
+  const spinId = confirmar ? 'btnConfSpin'  : 'btnGuardarSpin';
   setBtnState(btnId, txtId, spinId, true);
 
   const casasEnviar  = getSeleccionados().join(',');
@@ -643,7 +497,7 @@ async function guardar(confirmar) {
     cantidad_pago: cantidadPago,
     casas_enviar:  casasEnviar,
     confirmar:     confirmar ? 'true' : 'false',
-    enviar_correo: 'false'   // correo se envía solo con el botón específico
+    enviar_correo: 'true'   // siempre envía correo al guardar
   });
 
   try {
@@ -651,7 +505,6 @@ async function guardar(confirmar) {
     const data = await resp.json();
 
     if (data.status === 'OK') {
-      // Actualizar local
       document.getElementById('a_dir_tel').value = data.dir_tel || '';
 
       if (data.url_whattsapp) {
@@ -659,17 +512,15 @@ async function guardar(confirmar) {
         document.getElementById('d_wa_link').textContent = data.url_whattsapp;
         document.getElementById('waWrap').style.display  = 'block';
         document.getElementById('btnWA').style.display   = 'flex';
-        clienteActual.url_wa = data.url_whattsapp;
       }
 
-      toast('✅', confirmar ? 'Confirmado' : 'Guardado',
-        confirmar
-          ? 'Estados cambiados a Reservado. Datos guardados.'
-          : 'Cambios guardados en Google Sheets.',
+      toast('✅',
+        confirmar ? 'Confirmado y correo enviado' : 'Guardado y correo enviado',
+        'Cliente: ' + clienteActual.nombre + ' — ' +
+        (confirmar ? 'Propiedades marcadas como Reservado.' : 'Datos guardados en Sheets.'),
         true);
 
       await cargarTodo();
-      // Mantener fila seleccionada
       const updated = clientes.find(c => c.id === clienteActual.id);
       if (updated) { clienteActual = updated; seleccionar(clienteActual.id); }
 
@@ -683,64 +534,30 @@ async function guardar(confirmar) {
   setBtnState(btnId, txtId, spinId, false);
 }
 
-/* ══════════════════════════════════════════════════════════
-   ENVIAR CORREO AL CLIENTE
-══════════════════════════════════════════════════════════ */
-async function enviarCorreo() {
-  if (!clienteActual) return;
-  setBtnState('btnCorreo', 'btnCorreoTxt', 'btnCorreoSpin', true);
-
-  const casasEnviar  = getSeleccionados().join(',') || clienteActual.casas_enviar || '';
-  const cantidadPago = document.getElementById('a_cant_pago').value.trim();
-
-  const params = new URLSearchParams({
-    accion:        'admin_actualizar',
-    id_cliente:    clienteActual.id,
-    cantidad_pago: cantidadPago,
-    casas_enviar:  casasEnviar,
-    confirmar:     'false',
-    enviar_correo: 'true'
-  });
-
-  try {
-    const resp = await fetch(APPS_URL, { method: 'POST', body: params });
-    const data = await resp.json();
-    if (data.status === 'OK') {
-      toast('📧', 'Correo enviado', 'El cliente ' + clienteActual.nombre + ' recibió el correo de confirmación.', true);
-    } else {
-      toast('⚠️', 'Error', data.mensaje || 'No se pudo enviar el correo.', false);
-    }
-  } catch(err) {
-    toast('⚠️', 'Error de red', err.message, false);
-  }
-
-  setBtnState('btnCorreo', 'btnCorreoTxt', 'btnCorreoSpin', false);
-}
-
-/* ══════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════
    WHATSAPP
-══════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════ */
 function abrirWhatsApp() {
   const url = document.getElementById('d_wa_link').href;
   if (url && url !== '#') window.open(url, '_blank');
 }
 
-/* ══════════════════════════════════════════════════════════
-   HELPERS UI
-══════════════════════════════════════════════════════════ */
-function setBtnState(btnId, txtId, spinId, loading) {
-  document.getElementById(btnId).disabled           = loading;
-  document.getElementById(txtId).style.display      = loading ? 'none'   : 'inline';
-  document.getElementById(spinId).style.display     = loading ? 'inline' : 'none';
+/* ══════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════ */
+function setBtnState(btnId, txtId, spinId, on) {
+  document.getElementById(btnId).disabled          = on;
+  document.getElementById(txtId).style.display     = on ? 'none'   : 'inline';
+  document.getElementById(spinId).style.display    = on ? 'inline' : 'none';
 }
 
 function abrirLightbox(url) {
-  document.getElementById('lightboxImg').src = url;
+  document.getElementById('lbImg').src = url;
   document.getElementById('lightbox').classList.add('open');
 }
 function cerrarLightbox() {
   document.getElementById('lightbox').classList.remove('open');
-  document.getElementById('lightboxImg').src = '';
+  document.getElementById('lbImg').src = '';
 }
 
 function toast(icon, titulo, msg, ok) {
@@ -754,10 +571,10 @@ function toast(icon, titulo, msg, ok) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 5000);
 }
 
-// Cerrar lightbox con Escape
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') cerrarLightbox();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarLightbox(); });
+
+// Arrancar
+cargarTodo();
 </script>
 </body>
 </html>
