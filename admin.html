@@ -433,7 +433,7 @@ async function cargarTodo() {
     alquileres = rProp.alquileres || [];
     clientes   = (rCli.clientes   || []).reverse(); // más recientes primero
 
-    construirMultiSelect();
+    // multiselect se construye al seleccionar cliente
     filtrar();
     document.getElementById('lastUpdate').textContent =
       'Actualizado: ' + new Date().toLocaleTimeString();
@@ -444,27 +444,38 @@ async function cargarTodo() {
 
 /* ══════════════════════════════════════════════════════════
    MULTI-SELECT de propiedades
+   Solo muestra los IDs que el cliente seleccionó en su solicitud
 ══════════════════════════════════════════════════════════ */
-function construirMultiSelect() {
+function construirMultiSelectFiltrado(idsSolicitud) {
   const wrap = document.getElementById('msWrap');
   let html = '';
 
-  terrenos.forEach(t => {
-    html += `<div class="ms-opt">
-      <input type="checkbox" id="ms_${t.id}" value="${t.id}" onchange="actualizarMsTexto()">
-      <label for="ms_${t.id}">${t.id} — ${t.nombre || t.ubicacion || ''}</label>
-      <span class="ms-tipo">Terreno</span>
-    </div>`;
-  });
-  alquileres.forEach(a => {
-    html += `<div class="ms-opt">
-      <input type="checkbox" id="ms_${a.id}" value="${a.id}" onchange="actualizarMsTexto()">
-      <label for="ms_${a.id}">${a.id} — ${a.descripcion || a.direccion || ''}</label>
-      <span class="ms-tipo">Alquiler</span>
-    </div>`;
+  idsSolicitud.forEach(id => {
+    const terreno  = terrenos.find(t => t.id === id);
+    const alquiler = alquileres.find(a => a.id === id);
+
+    if (terreno) {
+      html += `<div class="ms-opt">
+        <input type="checkbox" id="ms_${terreno.id}" value="${terreno.id}" onchange="actualizarMsTexto()">
+        <label for="ms_${terreno.id}">${terreno.id} — ${terreno.nombre || terreno.ubicacion || ''}</label>
+        <span class="ms-tipo">Terreno</span>
+      </div>`;
+    } else if (alquiler) {
+      html += `<div class="ms-opt">
+        <input type="checkbox" id="ms_${alquiler.id}" value="${alquiler.id}" onchange="actualizarMsTexto()">
+        <label for="ms_${alquiler.id}">${alquiler.id} — ${alquiler.descripcion || alquiler.direccion || ''}</label>
+        <span class="ms-tipo">Alquiler</span>
+      </div>`;
+    } else {
+      html += `<div class="ms-opt">
+        <input type="checkbox" id="ms_${id}" value="${id}" onchange="actualizarMsTexto()">
+        <label for="ms_${id}">${id}</label>
+        <span class="ms-tipo">—</span>
+      </div>`;
+    }
   });
 
-  wrap.innerHTML = html || '<div style="color:var(--txt2);font-size:.8rem;padding:.5rem;">Sin propiedades</div>';
+  wrap.innerHTML = html || '<div style="color:var(--txt2);font-size:.8rem;padding:.5rem;">Sin propiedades en esta solicitud</div>';
 }
 
 function actualizarMsTexto() {
@@ -479,16 +490,15 @@ function getSeleccionados() {
 }
 
 function setSeleccionados(ids) {
-  // Desmarcar todos primero
   document.querySelectorAll('#msWrap input[type="checkbox"]')
     .forEach(cb => cb.checked = false);
-  // Marcar los que corresponden
   ids.forEach(id => {
     const cb = document.getElementById('ms_' + id.trim());
     if (cb) cb.checked = true;
   });
   actualizarMsTexto();
 }
+
 
 /* ══════════════════════════════════════════════════════════
    TABLA
@@ -583,7 +593,12 @@ function seleccionar(id) {
   const cantNum = (clienteActual.cant_pago || '').replace(/\s*Bs\s*/i, '').trim();
   document.getElementById('a_cant_pago').value = cantNum;
 
-  // Casas_Enviar — preseleccionar
+  // Casas_Enviar — construir multiselect SOLO con IDs de esta solicitud
+  const idsSolicitud = (clienteActual.solicitud || '')
+    .split(',').map(x => x.trim()).filter(Boolean);
+  construirMultiSelectFiltrado(idsSolicitud);
+
+  // Preseleccionar los que ya fueron guardados en Casas_Enviar
   const casasGuardadas = (clienteActual.casas_enviar || '')
     .split(',').map(x => x.trim()).filter(Boolean);
   setSeleccionados(casasGuardadas);
