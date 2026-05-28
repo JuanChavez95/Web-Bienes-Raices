@@ -230,7 +230,7 @@
           <input type="text" id="a_cant_pago" placeholder="Ej: 2" />
         </div>
 
-        <!-- Casas_Enviar — solo IDs de la solicitud -->
+        <!-- Casas_Enviar -->
         <div class="campo">
           <label>Casas_Enviar — marca las propiedades a aprobar</label>
           <div class="ms-wrap" id="msWrap">
@@ -239,7 +239,7 @@
           <div style="font-size:.72rem;color:var(--txt2);margin-top:.3rem;" id="msSelText"></div>
         </div>
 
-        <!-- Agregar_Direccion_Telefono (solo lectura, generado al guardar) -->
+        <!-- Agregar_Direccion_Telefono (solo lectura) -->
         <div class="campo">
           <label>Agregar_Direccion_Telefono (generado automáticamente)</label>
           <textarea id="a_dir_tel" rows="4" readonly
@@ -254,15 +254,11 @@
             style="display:block;font-size:.78rem;word-break:break-all;color:var(--verde-c);">—</a>
         </div>
 
-        <!-- Acciones -->
+        <!-- Acciones — UN SOLO BOTÓN -->
         <div class="acciones">
-          <button class="btn btn-verde btn-full" id="btnGuardar" onclick="guardar(false)">
-            <span id="btnGuardarTxt">💾 Guardar — envía correo al cliente</span>
+          <button class="btn btn-oro btn-full" id="btnGuardar" onclick="guardar()">
+            <span id="btnGuardarTxt">✅ Guardar, reservar y enviar correo</span>
             <span id="btnGuardarSpin" style="display:none;"><span class="spinner"></span> Guardando…</span>
-          </button>
-          <button class="btn btn-oro btn-full" id="btnConfirmar" onclick="guardar(true)">
-            <span id="btnConfTxt">✅ Confirmar y marcar como Reservado</span>
-            <span id="btnConfSpin" style="display:none;"><span class="spinner"></span> Confirmando…</span>
           </button>
           <button class="btn btn-wa btn-full" id="btnWA" onclick="abrirWhatsApp()" style="display:none;">
             💬 Abrir WhatsApp
@@ -379,14 +375,12 @@ function seleccionar(id) {
   const fila = document.querySelector(`#tablaBody tr[data-id="${id}"]`);
   if (fila) fila.classList.add('activa');
 
-  // Ficha
   document.getElementById('d_id').textContent        = clienteActual.id;
   document.getElementById('d_nombre').textContent    = clienteActual.nombre + ' ' + clienteActual.apellido;
   document.getElementById('d_correo').textContent    = clienteActual.correo   || '—';
   document.getElementById('d_telefono').textContent  = clienteActual.telefono || '—';
   document.getElementById('d_solicitud').textContent = clienteActual.solicitud || '—';
 
-  // Comprobante
   const compWrap = document.getElementById('d_comprobante');
   if (clienteActual.url_pago && clienteActual.url_pago !== 'Sin comprobante') {
     compWrap.innerHTML = `<a href="${clienteActual.url_pago}" target="_blank">
@@ -396,24 +390,19 @@ function seleccionar(id) {
     compWrap.innerHTML = '<span class="sin-img">Sin comprobante</span>';
   }
 
-  // Cantidad_Pago — mostrar solo el número
   const cantNum = (clienteActual.cant_pago || '').replace(/\s*Bs\s*/i, '').trim();
   document.getElementById('a_cant_pago').value = cantNum;
 
-  // Multi-select: SOLO con los IDs de la solicitud de este cliente
   const idsSolicitud = (clienteActual.solicitud || '')
     .split(',').map(x => x.trim()).filter(Boolean);
   construirMultiSelect(idsSolicitud);
 
-  // Preseleccionar los que ya están guardados en Casas_Enviar
   const casasGuardadas = (clienteActual.casas_enviar || '')
     .split(',').map(x => x.trim()).filter(Boolean);
   setSeleccionados(casasGuardadas);
 
-  // Dir_Tel
   document.getElementById('a_dir_tel').value = clienteActual.dir_tel || '';
 
-  // WhatsApp
   if (clienteActual.url_wa) {
     document.getElementById('d_wa_link').href        = clienteActual.url_wa;
     document.getElementById('d_wa_link').textContent = clienteActual.url_wa;
@@ -429,7 +418,7 @@ function seleccionar(id) {
 }
 
 /* ══════════════════════════════════════════════════
-   MULTI-SELECT — solo IDs de la solicitud del cliente
+   MULTI-SELECT
 ══════════════════════════════════════════════════ */
 function construirMultiSelect(idsSolicitud) {
   const wrap = document.getElementById('msWrap');
@@ -445,7 +434,6 @@ function construirMultiSelect(idsSolicitud) {
         : id;
     const tipo = t ? 'Terreno' : a ? 'Alquiler' : '—';
 
-    // Usar data-val para evitar colisión de IDs numéricos en el DOM
     html += `<div class="ms-opt">
       <input type="checkbox" data-val="${id}" onchange="actualizarMsTexto()">
       <label onclick="this.previousElementSibling.click()">${label}</label>
@@ -464,7 +452,6 @@ function actualizarMsTexto() {
     sel.length ? 'Seleccionados: ' + sel.join(', ') : '';
 }
 
-// Lee los valores usando data-val, NO getElementById
 function getSeleccionados() {
   return [...document.querySelectorAll('#msWrap input[type="checkbox"]:checked')]
     .map(cb => cb.dataset.val);
@@ -478,15 +465,14 @@ function setSeleccionados(ids) {
 }
 
 /* ══════════════════════════════════════════════════
-   GUARDAR — siempre envía correo al cliente
+   GUARDAR — hace todo: guarda datos, reserva y envía correo
 ══════════════════════════════════════════════════ */
-async function guardar(confirmar) {
+async function guardar() {
   if (!clienteActual) return;
 
-  const btnId  = confirmar ? 'btnConfirmar' : 'btnGuardar';
-  const txtId  = confirmar ? 'btnConfTxt'   : 'btnGuardarTxt';
-  const spinId = confirmar ? 'btnConfSpin'  : 'btnGuardarSpin';
-  setBtnState(btnId, txtId, spinId, true);
+  document.getElementById('btnGuardar').disabled           = true;
+  document.getElementById('btnGuardarTxt').style.display   = 'none';
+  document.getElementById('btnGuardarSpin').style.display  = 'inline';
 
   const casasEnviar  = getSeleccionados().join(',');
   const cantidadPago = document.getElementById('a_cant_pago').value.trim();
@@ -496,8 +482,7 @@ async function guardar(confirmar) {
     id_cliente:    clienteActual.id,
     cantidad_pago: cantidadPago,
     casas_enviar:  casasEnviar,
-    confirmar:     confirmar ? 'true' : 'false',
-    enviar_correo: 'true'   // siempre envía correo al guardar
+    enviar_correo: 'true'
   });
 
   try {
@@ -514,10 +499,8 @@ async function guardar(confirmar) {
         document.getElementById('btnWA').style.display   = 'flex';
       }
 
-      toast('✅',
-        confirmar ? 'Confirmado y correo enviado' : 'Guardado y correo enviado',
-        'Cliente: ' + clienteActual.nombre + ' — ' +
-        (confirmar ? 'Propiedades marcadas como Reservado.' : 'Datos guardados en Sheets.'),
+      toast('✅', 'Guardado y correo enviado',
+        'Propiedades marcadas como Reservado. Cliente: ' + clienteActual.nombre,
         true);
 
       await cargarTodo();
@@ -531,7 +514,9 @@ async function guardar(confirmar) {
     toast('⚠️', 'Error de red', err.message, false);
   }
 
-  setBtnState(btnId, txtId, spinId, false);
+  document.getElementById('btnGuardar').disabled           = false;
+  document.getElementById('btnGuardarTxt').style.display   = 'inline';
+  document.getElementById('btnGuardarSpin').style.display  = 'none';
 }
 
 /* ══════════════════════════════════════════════════
@@ -545,12 +530,6 @@ function abrirWhatsApp() {
 /* ══════════════════════════════════════════════════
    HELPERS
 ══════════════════════════════════════════════════ */
-function setBtnState(btnId, txtId, spinId, on) {
-  document.getElementById(btnId).disabled          = on;
-  document.getElementById(txtId).style.display     = on ? 'none'   : 'inline';
-  document.getElementById(spinId).style.display    = on ? 'inline' : 'none';
-}
-
 function abrirLightbox(url) {
   document.getElementById('lbImg').src = url;
   document.getElementById('lightbox').classList.add('open');
@@ -573,7 +552,6 @@ function toast(icon, titulo, msg, ok) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarLightbox(); });
 
-// Arrancar
 cargarTodo();
 </script>
 </body>
