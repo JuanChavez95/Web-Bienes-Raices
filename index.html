@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <style>
     :root {
       --verde:       #1a3a2a;
@@ -651,49 +653,7 @@
           <h3>Pago de Solicitud</h3>
           <p class="qr-sub">Escanea el QR y realiza el pago de 1 Bs para procesar tu solicitud</p>
           <div class="qr-code-wrap">
-            <!-- QR simulado SVG -->
-            <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" style="width:160px;height:160px;display:block;">
-              <!-- Marco exterior -->
-              <rect width="160" height="160" fill="white"/>
-              <!-- Finder pattern TL -->
-              <rect x="10" y="10" width="45" height="45" fill="#1a3a2a" rx="3"/>
-              <rect x="16" y="16" width="33" height="33" fill="white" rx="1"/>
-              <rect x="22" y="22" width="21" height="21" fill="#1a3a2a" rx="1"/>
-              <!-- Finder pattern TR -->
-              <rect x="105" y="10" width="45" height="45" fill="#1a3a2a" rx="3"/>
-              <rect x="111" y="16" width="33" height="33" fill="white" rx="1"/>
-              <rect x="117" y="22" width="21" height="21" fill="#1a3a2a" rx="1"/>
-              <!-- Finder pattern BL -->
-              <rect x="10" y="105" width="45" height="45" fill="#1a3a2a" rx="3"/>
-              <rect x="16" y="111" width="33" height="33" fill="white" rx="1"/>
-              <rect x="22" y="117" width="21" height="21" fill="#1a3a2a" rx="1"/>
-              <!-- Módulos de datos simulados (patrón decorativo) -->
-              <g fill="#1a3a2a">
-                <rect x="62" y="10" width="6" height="6"/><rect x="72" y="10" width="6" height="6"/><rect x="82" y="10" width="6" height="6"/>
-                <rect x="62" y="20" width="6" height="6"/><rect x="82" y="20" width="6" height="6"/>
-                <rect x="72" y="30" width="6" height="6"/>
-                <rect x="62" y="40" width="6" height="6"/><rect x="72" y="40" width="6" height="6"/>
-                <rect x="10" y="62" width="6" height="6"/><rect x="20" y="62" width="6" height="6"/>
-                <rect x="30" y="72" width="6" height="6"/>
-                <rect x="10" y="82" width="6" height="6"/><rect x="30" y="82" width="6" height="6"/>
-                <rect x="62" y="62" width="6" height="6"/><rect x="72" y="62" width="6" height="6"/><rect x="82" y="62" width="6" height="6"/><rect x="92" y="62" width="6" height="6"/>
-                <rect x="62" y="72" width="6" height="6"/><rect x="82" y="72" width="6" height="6"/>
-                <rect x="72" y="82" width="6" height="6"/><rect x="92" y="82" width="6" height="6"/>
-                <rect x="62" y="92" width="6" height="6"/><rect x="72" y="92" width="6" height="6"/><rect x="82" y="92" width="6" height="6"/>
-                <rect x="105" y="62" width="6" height="6"/><rect x="115" y="62" width="6" height="6"/><rect x="135" y="62" width="6" height="6"/>
-                <rect x="105" y="72" width="6" height="6"/><rect x="125" y="72" width="6" height="6"/>
-                <rect x="115" y="82" width="6" height="6"/><rect x="135" y="82" width="6" height="6"/>
-                <rect x="105" y="92" width="6" height="6"/><rect x="115" y="92" width="6" height="6"/><rect x="135" y="92" width="6" height="6"/>
-                <rect x="62" y="105" width="6" height="6"/><rect x="82" y="105" width="6" height="6"/>
-                <rect x="72" y="115" width="6" height="6"/><rect x="92" y="115" width="6" height="6"/>
-                <rect x="62" y="125" width="6" height="6"/><rect x="72" y="125" width="6" height="6"/>
-                <rect x="82" y="135" width="6" height="6"/><rect x="92" y="135" width="6" height="6"/>
-                <rect x="105" y="105" width="6" height="6"/><rect x="125" y="105" width="6" height="6"/>
-                <rect x="115" y="115" width="6" height="6"/>
-                <rect x="105" y="125" width="6" height="6"/><rect x="135" y="125" width="6" height="6"/>
-                <rect x="115" y="135" width="6" height="6"/><rect x="125" y="135" width="6" height="6"/>
-              </g>
-            </svg>
+            <div id="qrcode"></div>
           </div>
           <div class="qr-info-box">
             <div class="qr-info-row">
@@ -711,8 +671,10 @@
           </div>
           <p class="qr-note">Sube la captura de tu comprobante en el formulario. Tu solicitud será revisada manualmente.</p>
         </div>
+
       </div>
     </div>
+
   </section>
 
   <!-- FOOTER -->
@@ -1266,6 +1228,15 @@
       mostrarCargando('Registrando solicitud en el sistema…');
       document.getElementById('formReserva').submit();
     }
+    new QRCode(document.getElementById('qrcode'), {
+      text: 'Cuenta: 123455 | Usuario: JuanPari',
+      width: 160,
+      height: 160,
+      colorDark: '#1a3a2a',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+
   </script>
 </body>
 </html>
