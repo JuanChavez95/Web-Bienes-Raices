@@ -332,6 +332,48 @@
       #seleccionBar { padding: 0.75rem 1rem; flex-direction: column; align-items: stretch; }
       #seleccionBar .bar-cta { text-align: center; }
     }
+
+    #resumenTotal {
+      margin-top: 0.75rem;
+      padding-top: 0.6rem;
+      border-top: 1px solid rgba(201,168,76,0.25);
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.7);
+    }
+    #bloqueReclamos {
+    background: var(--verde);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    text-align: center;
+    padding: 1.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  #bloqueReclamos p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.88rem;
+    margin: 0;
+  }
+  #btnReclamos {
+    display: inline-block;
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.55);
+    color: var(--oro-claro);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.55rem 1.4rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: var(--trans);
+  }
+  #btnReclamos:hover {
+    background: rgba(201,168,76,0.12);
+    border-color: var(--oro);
+    color: var(--oro);
+  }
   </style>
 </head>
 <body>
@@ -677,6 +719,14 @@
   <footer>
     <strong>BienesCasas Bolivia</strong> &nbsp;·&nbsp; Sistema de Solicitudes Casas Chavez<br>
     <span style="color:rgba(255,255,255,0.3); font-size:0.75rem;">Derechos reservados &copy; 2026</span>
+    <!-- BLOQUE RECLAMOS -->
+    <div id="bloqueReclamos">
+      <p>¿Tuviste un problema con tu solicitud?</p>
+      <a href="https://juanchavez95.github.io/Web-Trabajo-Juan/reclamos.html"
+        target="_blank" id="btnReclamos">
+        📝 Presentar un Reclamo
+      </a>
+    </div>
   </footer>
 
   <!-- BARRA DE SELECCIÓN MÚLTIPLE -->
@@ -928,6 +978,16 @@
         const nombre = propiedadesSeleccionadas.get(id);
         return `<span class="solicitud-chip">${id} — ${nombre}</span>`;
       }).join('');
+
+      // ── NUEVO: total dinámico ──
+      const total = propiedadesSeleccionadas.size * 5;
+      let totalEl = document.getElementById('resumenTotal');
+      if (!totalEl) {
+        totalEl = document.createElement('div');
+        totalEl.id = 'resumenTotal';
+        summary.appendChild(totalEl);
+      }
+      totalEl.innerHTML = `Total de reservas: <strong style="color:var(--oro);font-size:1.05rem;">${total} Bs</strong>`;
 
       summary.classList.add('show');
     }

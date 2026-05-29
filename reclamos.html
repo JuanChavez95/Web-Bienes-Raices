@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reclamos — Casas Chavez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --verde:       #1a3a2a;
+      --verde-medio: #2d6a4f;
+      --verde-claro: #52b788;
+      --oro:         #c9984c;
+      --oro-claro:   #e8d5a3;
+      --crema:       #f8f5ef;
+      --blanco:      #ffffff;
+      --gris-texto:  #4a4a4a;
+      --trans:       all 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--verde);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .rc-header {
+      text-align: center;
+      margin-bottom: 2.2rem;
+    }
+    .rc-badge {
+      display: inline-block;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.45);
+      color: var(--oro-claro);
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 50px;
+      margin-bottom: 1rem;
+    }
+    .rc-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 600;
+      color: var(--blanco);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .rc-header p {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .rc-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 2.5rem 2.8rem;
+      width: 100%;
+      max-width: 520px;
+      backdrop-filter: blur(10px);
+    }
+
+    .rc-group { margin-bottom: 1.4rem; }
+    .rc-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.5rem;
+    }
+    .rc-input, .rc-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: var(--blanco);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.85rem 1.1rem;
+      transition: var(--trans);
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .rc-input::placeholder, .rc-textarea::placeholder { color: rgba(255,255,255,0.28); }
+    .rc-input:focus, .rc-textarea:focus {
+      border-color: var(--oro);
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+    }
+    .rc-input.error, .rc-textarea.error { border-color: #e74c3c; }
+    .rc-textarea { resize: vertical; min-height: 130px; }
+
+    .rc-btn {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, var(--oro) 0%, #b8922e 100%);
+      color: var(--verde);
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.97rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--trans);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+    .rc-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(201,168,76,0.4);
+    }
+    .rc-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .rc-spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(26,58,42,0.3);
+      border-top-color: var(--verde);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .rc-msg {
+      display: none;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin-top: 1.2rem;
+      text-align: center;
+    }
+    .rc-msg.exito {
+      background: rgba(82,183,136,0.15);
+      border: 1px solid rgba(82,183,136,0.4);
+      color: #6ee7b7;
+    }
+    .rc-msg.error-msg {
+      background: rgba(231,76,60,0.12);
+      border: 1px solid rgba(231,76,60,0.35);
+      color: #fca5a5;
+    }
+
+    .rc-back {
+      display: inline-block;
+      margin-top: 1.8rem;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.82rem;
+      text-decoration: none;
+      transition: color 0.2s;
+      text-align: center;
+    }
+    .rc-back:hover { color: var(--oro-claro); }
+
+    @media (max-width: 560px) {
+      .rc-card { padding: 1.8rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="rc-header">
+    <div class="rc-badge">📝 Casas Chavez · Bolivia</div>
+    <h1>Presentar un Reclamo</h1>
+    <p>Escríbenos tu inconveniente. Lo atenderemos<br>a la brevedad posible.</p>
+  </div>
+
+  <div class="rc-card">
+    <div class="rc-group">
+      <label class="rc-label" for="rc-correo">Correo Electrónico</label>
+      <input class="rc-input" type="email" id="rc-correo" placeholder="tucorreo@email.com" />
+    </div>
+    <div class="rc-group">
+      <label class="rc-label" for="rc-reclamo">Reclamo</label>
+      <textarea class="rc-textarea" id="rc-reclamo" placeholder="Describe tu reclamo con el mayor detalle posible…"></textarea>
+    </div>
+
+    <button class="rc-btn" id="rc-btn" onclick="enviarReclamo()">
+      <span class="rc-spinner" id="rc-spinner"></span>
+      <span id="rc-btn-text">Enviar Reclamo</span>
+    </button>
+
+    <div class="rc-msg" id="rc-msg"></div>
+  </div>
+
+  <a href="https://juanchavez95.github.io/Web-Bienes-Raices/" class="rc-back">
+    ← Volver al inicio
+  </a>
+
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzf9oOggcWWkBjL0gUKUpr6MaMytmzriPNYMGlUe7rAJ-MTq09OcU4tNs0s9EcraQ/exec';
+
+    async function enviarReclamo() {
+      const correoEl  = document.getElementById('rc-correo');
+      const reclamoEl = document.getElementById('rc-reclamo');
+      const btn       = document.getElementById('rc-btn');
+      const spinner   = document.getElementById('rc-spinner');
+      const btnText   = document.getElementById('rc-btn-text');
+      const msgEl     = document.getElementById('rc-msg');
+
+      // Limpiar errores previos
+      correoEl.classList.remove('error');
+      reclamoEl.classList.remove('error');
+      msgEl.style.display = 'none';
+
+      // Validaciones
+      let hayError = false;
+      if (!correoEl.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoEl.value.trim())) {
+        correoEl.classList.add('error');
+        hayError = true;
+      }
+      if (!reclamoEl.value.trim() || reclamoEl.value.trim().length < 10) {
+        reclamoEl.classList.add('error');
+        hayError = true;
+      }
+      if (hayError) {
+        mostrarMsg('Por favor completa todos los campos correctamente.', false);
+        return;
+      }
+
+      // Loader ON
+      btn.disabled          = true;
+      spinner.style.display = 'block';
+      btnText.textContent   = 'Enviando…';
+
+      try {
+        const fd = new FormData();
+        fd.append('accion',  'reclamo');
+        fd.append('correo',  correoEl.value.trim());
+        fd.append('reclamo', reclamoEl.value.trim());
+
+        await fetch(APPS_SCRIPT_URL, { method: 'POST', body: fd });
+
+        mostrarMsg('✅ Tu reclamo fue enviado. Te responderemos pronto.', true);
+        correoEl.value  = '';
+        reclamoEl.value = '';
+
+      } catch (err) {
+        mostrarMsg('❌ No se pudo enviar. Intenta nuevamente.', false);
+      } finally {
+        btn.disabled          = false;
+        spinner.style.display = 'none';
+        btnText.textContent   = 'Enviar Reclamo';
+      }
+    }
+
+    function mostrarMsg(texto, exito) {
+      const el = document.getElementById('rc-msg');
+      el.textContent  = texto;
+      el.className    = 'rc-msg ' + (exito ? 'exito' : 'error-msg');
+      el.style.display = 'block';
+    }
+
+    // Limpiar error al escribir
+    ['rc-correo','rc-reclamo'].forEach(id => {
+      document.getElementById(id).addEventListener('input', function() {
+        this.classList.remove('error');
+      });
+    });
+  </script>
+</body>
+</html>
