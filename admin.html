@@ -422,7 +422,9 @@ function seleccionar(id) {
     .split(',').map(x => x.trim()).filter(Boolean);
   setSeleccionados(casasGuardadas);
 
-  document.getElementById('a_dir_tel').value = clienteActual.dir_tel || '';
+  const totalSugerido = (clienteActual.solicitud || '').split(',').filter(x => x.trim()).length * 5;
+  document.getElementById('a_cant_pago').value = String(totalSugerido);
+    document.getElementById('a_dir_tel').value = clienteActual.dir_tel || '';
 
   // WhatsApp
   if (clienteActual.url_wa) {
@@ -487,10 +489,6 @@ function actualizarMsTexto() {
   const sel = getSeleccionados();
   document.getElementById('msSelText').textContent =
     sel.length ? 'Seleccionados: ' + sel.join(', ') : '';
-
-  // Cantidad_Pago
-  const cantNum = (clienteActual.cant_pago || '').replace(/\s*Bs\s*/i, '').trim();
-  document.getElementById('a_cant_pago').value = cantNum;
 }
 
 function getSeleccionados() {
