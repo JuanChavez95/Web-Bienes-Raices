@@ -232,7 +232,7 @@
 
         <!-- Cantidad_Pago -->
         <div class="campo">
-          <label>Cantidad_Pago — ingresa el número (se guarda como "X Bs")</label>
+          <label>Cantidad_Pago — sugerido según selección (5 Bs c/u), editable</label>
           <input type="text" id="a_cant_pago" placeholder="Ej: 2" />
         </div>
 
@@ -487,6 +487,10 @@ function actualizarMsTexto() {
   const sel = getSeleccionados();
   document.getElementById('msSelText').textContent =
     sel.length ? 'Seleccionados: ' + sel.join(', ') : '';
+
+  // Calcular total sugerido: 5 Bs por propiedad
+  const total = sel.length * 5;
+  document.getElementById('a_cant_pago').value = total > 0 ? String(total) : '';
 }
 
 function getSeleccionados() {
