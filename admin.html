@@ -422,8 +422,6 @@ function seleccionar(id) {
     .split(',').map(x => x.trim()).filter(Boolean);
   setSeleccionados(casasGuardadas);
 
-  const totalSugerido = (clienteActual.solicitud || '').split(',').filter(x => x.trim()).length * 5;
-  document.getElementById('a_cant_pago').value = String(totalSugerido);
     document.getElementById('a_dir_tel').value = clienteActual.dir_tel || '';
 
   // WhatsApp

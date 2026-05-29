@@ -606,6 +606,7 @@
               <input type="hidden" name="accion"        value="nueva_solicitud" />
               <input type="hidden" name="solicitud"     id="inputSolicitud" />
               <input type="hidden" name="url_pago"      id="url_pago" value="Sin comprobante" />
+              <input type="hidden" name="cantidad_pago" id="cantidad_pago" value="" />
 
               <div class="form-grid">
                 <div>
@@ -1210,6 +1211,9 @@
         return;
       }
 
+      const totalBs = propiedadesSeleccionadas.size * 5;
+      document.getElementById('cantidad_pago').value = totalBs;
+      
       setBtnLoading(true);
       mostrarCargando('Subiendo comprobante de pago…');
       uploadStatus.textContent   = '⏳ Subiendo comprobante…';
