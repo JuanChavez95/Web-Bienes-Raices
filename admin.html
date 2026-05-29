@@ -488,9 +488,9 @@ function actualizarMsTexto() {
   document.getElementById('msSelText').textContent =
     sel.length ? 'Seleccionados: ' + sel.join(', ') : '';
 
-  // Calcular total sugerido: 5 Bs por propiedad
-  const total = sel.length * 5;
-  document.getElementById('a_cant_pago').value = total > 0 ? String(total) : '';
+  // Cantidad_Pago
+  const cantNum = (clienteActual.cant_pago || '').replace(/\s*Bs\s*/i, '').trim();
+  document.getElementById('a_cant_pago').value = cantNum;
 }
 
 function getSeleccionados() {
